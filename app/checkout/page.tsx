@@ -16,7 +16,8 @@ import {
     Mail,
     Phone,
     Building,
-    Package
+    Package,
+    Loader2
 } from 'lucide-react';
 
 type PaymentMethod = 'mpesa' | 'card' | 'cod';
@@ -40,6 +41,8 @@ export default function CheckoutPage() {
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('mpesa');
     const [isProcessing, setIsProcessing] = useState(false);
     const [orderPlaced, setOrderPlaced] = useState(false);
+    const [orderId, setOrderId] = useState<string>('');
+    const [mpesaStatus, setMpesaStatus] = useState<string>('');
     const [formData, setFormData] = useState<ShippingForm>({
         firstName: '',
         lastName: '',
@@ -61,12 +64,89 @@ export default function CheckoutPage() {
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
+    const createOrder = async () => {
+        try {
+            const res = await fetch('/api/orders', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    orderItems: items,
+                    shippingAddress: { ...formData, country: 'Kenya' },
+                    paymentMethod,
+                    itemsPrice: totalPrice,
+                    shippingPrice: shippingCost,
+                    taxPrice: taxAmount,
+                    totalPrice: finalTotal,
+                }),
+            });
+            const data = await res.json();
+            if (data.success) {
+                return data.data._id;
+            }
+            throw new Error(data.message || 'Failed to create order');
+        } catch (error) {
+            console.error('Create order error:', error);
+            setMpesaStatus('Failed to create order. Please try again.');
+            return null;
+        }
+    };
+
+    const handleMpesaPayment = async (createdOrderId: string) => {
+        setMpesaStatus('Initializing STK Push...');
+        try {
+            const res = await fetch('/api/mpesa/stkpush', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    phoneNumber: formData.phone,
+                    amount: finalTotal,
+                    orderId: createdOrderId // Pass order ID so we can link it later if needed
+                })
+            });
+            const data = await res.json();
+
+            if (data.success) {
+                setMpesaStatus('STK Push Sent! Check your phone to complete payment.');
+                setOrderId(createdOrderId); // Set order ID for confirmation screen
+
+                // In a real app, we would poll /api/orders/{id} for status update
+                // For now, allow manual confirmation or simulate success
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                return true;
+            } else {
+                setMpesaStatus('Failed to send STK Push. Please try again.');
+                return false;
+            }
+        } catch (error) {
+            console.error(error);
+            setMpesaStatus('Error connecting to M-Pesa.');
+            return false;
+        }
+    };
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsProcessing(true);
 
-        // Simulate order processing
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        // 1. Create Order
+        const createdOrderId = await createOrder();
+        if (!createdOrderId) {
+            setIsProcessing(false);
+            return;
+        }
+
+        // 2. Process Payment
+        if (paymentMethod === 'mpesa') {
+            const success = await handleMpesaPayment(createdOrderId);
+            if (!success) {
+                setIsProcessing(false);
+                return;
+            }
+        } else {
+            // Simulate other payment methods
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            setOrderId(createdOrderId);
+        }
 
         setIsProcessing(false);
         setOrderPlaced(true);
@@ -113,7 +193,9 @@ export default function CheckoutPage() {
                         <div className="space-y-2 text-sm">
                             <div className="flex justify-between">
                                 <span className="text-[var(--color-neutral-400)]">Order ID</span>
-                                <span className="font-mono text-[var(--color-accent)]">MT-{Date.now().toString(36).toUpperCase()}</span>
+                                <span className="font-mono text-[var(--color-accent)]">
+                                    {orderId ? `#${orderId.slice(-6).toUpperCase()}` : `MT-${Date.now().toString(36).toUpperCase()}`}
+                                </span>
                             </div>
                             <div className="flex justify-between">
                                 <span className="text-[var(--color-neutral-400)]">Payment Method</span>
@@ -359,9 +441,14 @@ export default function CheckoutPage() {
 
                                 {paymentMethod === 'mpesa' && (
                                     <div className="mt-6 p-4 bg-[var(--color-primary-light)] rounded-lg border border-white/10">
-                                        <p className="text-sm text-[var(--color-neutral-400)]">
+                                        <p className="text-sm text-[var(--color-neutral-400)] mb-2">
                                             You will receive an M-Pesa prompt on <strong className="text-[var(--color-neutral-200)]">{formData.phone || 'your phone'}</strong> to complete the payment.
                                         </p>
+                                        {mpesaStatus && (
+                                            <p className={`text-sm font-semibold ${mpesaStatus.includes('Failed') || mpesaStatus.includes('Error') ? 'text-red-500' : 'text-green-500'}`}>
+                                                {mpesaStatus}
+                                            </p>
+                                        )}
                                     </div>
                                 )}
 
@@ -470,7 +557,7 @@ export default function CheckoutPage() {
                                 >
                                     {isProcessing ? (
                                         <>
-                                            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                                            <Loader2 className="w-5 h-5 animate-spin" />
                                             Processing...
                                         </>
                                     ) : (
