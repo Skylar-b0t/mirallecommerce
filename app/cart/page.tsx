@@ -52,7 +52,7 @@ export default function CartPage() {
 
     return (
         <div className="min-h-screen py-12">
-            <div className="container-premium">
+            <div className="container-custom">
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl lg:text-5xl font-bold mb-3">Shopping Cart</h1>
