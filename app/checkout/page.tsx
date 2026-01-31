@@ -406,60 +406,74 @@ export default function CheckoutPage() {
                             </div>
 
                             {/* Payment Method */}
-                            <div className="surface-elevated rounded-2xl p-6 lg:p-8">
+                            <div className="surface-card rounded-2xl p-6 lg:p-8">
                                 <h2 className="text-xl font-bold mb-6 flex items-center gap-3">
-                                    <CreditCard className="w-5 h-5 text-[var(--color-accent)]" />
+                                    <CreditCard className="w-5 h-5 text-accent" />
                                     Payment Method
                                 </h2>
 
                                 <div className="grid sm:grid-cols-3 gap-4">
+                                    {/* M-Pesa - Featured */}
                                     <button
                                         type="button"
                                         onClick={() => setPaymentMethod('mpesa')}
-                                        className={`p-4 rounded-xl border-2 transition-all text-left ${paymentMethod === 'mpesa'
-                                                ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10'
-                                                : 'border-white/10 hover:border-white/20'
+                                        className={`p-4 rounded-xl border-2 transition-all text-left relative ${paymentMethod === 'mpesa'
+                                            ? 'border-accent bg-accent/10 shadow-md'
+                                            : 'border-border hover:border-accent/50'
                                             }`}
                                     >
-                                        <Smartphone className={`w-8 h-8 mb-3 ${paymentMethod === 'mpesa' ? 'text-[var(--color-accent)]' : 'text-[var(--color-neutral-400)]'}`} />
-                                        <div className="font-semibold text-[var(--color-neutral-100)]">M-Pesa</div>
-                                        <div className="text-xs text-[var(--color-neutral-500)]">Pay via mobile money</div>
+                                        {paymentMethod === 'mpesa' && (
+                                            <div className="absolute -top-2 -right-2 bg-accent text-accent-foreground text-xs font-bold px-2 py-1 rounded-full">
+                                                Popular
+                                            </div>
+                                        )}
+                                        <Smartphone className={`w-8 h-8 mb-3 ${paymentMethod === 'mpesa' ? 'text-accent' : 'text-muted'}`} />
+                                        <div className="font-semibold text-foreground">M-Pesa</div>
+                                        <div className="text-xs text-muted">Fast & secure</div>
                                     </button>
 
                                     <button
                                         type="button"
                                         onClick={() => setPaymentMethod('card')}
                                         className={`p-4 rounded-xl border-2 transition-all text-left ${paymentMethod === 'card'
-                                                ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10'
-                                                : 'border-white/10 hover:border-white/20'
+                                            ? 'border-accent bg-accent/10'
+                                            : 'border-border hover:border-accent/50'
                                             }`}
                                     >
-                                        <CreditCard className={`w-8 h-8 mb-3 ${paymentMethod === 'card' ? 'text-[var(--color-accent)]' : 'text-[var(--color-neutral-400)]'}`} />
-                                        <div className="font-semibold text-[var(--color-neutral-100)]">Card</div>
-                                        <div className="text-xs text-[var(--color-neutral-500)]">Visa, Mastercard</div>
+                                        <CreditCard className={`w-8 h-8 mb-3 ${paymentMethod === 'card' ? 'text-accent' : 'text-muted'}`} />
+                                        <div className="font-semibold text-foreground">Card</div>
+                                        <div className="text-xs text-muted">Visa, Mastercard</div>
                                     </button>
 
                                     <button
                                         type="button"
                                         onClick={() => setPaymentMethod('cod')}
                                         className={`p-4 rounded-xl border-2 transition-all text-left ${paymentMethod === 'cod'
-                                                ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10'
-                                                : 'border-white/10 hover:border-white/20'
+                                            ? 'border-accent bg-accent/10'
+                                            : 'border-border hover:border-accent/50'
                                             }`}
                                     >
-                                        <Banknote className={`w-8 h-8 mb-3 ${paymentMethod === 'cod' ? 'text-[var(--color-accent)]' : 'text-[var(--color-neutral-400)]'}`} />
-                                        <div className="font-semibold text-[var(--color-neutral-100)]">Cash on Delivery</div>
-                                        <div className="text-xs text-[var(--color-neutral-500)]">Pay when delivered</div>
+                                        <Banknote className={`w-8 h-8 mb-3 ${paymentMethod === 'cod' ? 'text-accent' : 'text-muted'}`} />
+                                        <div className="font-semibold text-foreground">Cash on Delivery</div>
+                                        <div className="text-xs text-muted">Pay when delivered</div>
                                     </button>
                                 </div>
 
                                 {paymentMethod === 'mpesa' && (
-                                    <div className="mt-6 p-4 bg-[var(--color-primary-light)] rounded-lg border border-white/10">
-                                        <p className="text-sm text-[var(--color-neutral-400)] mb-2">
-                                            You will receive an M-Pesa prompt on <strong className="text-[var(--color-neutral-200)]">{formData.phone || 'your phone'}</strong> to complete the payment.
-                                        </p>
+                                    <div className="mt-6 p-4 bg-accent/5 rounded-lg border border-accent/20">
+                                        <div className="flex items-start gap-3 mb-3">
+                                            <Smartphone className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
+                                            <div>
+                                                <p className="text-sm font-medium text-foreground mb-1">
+                                                    M-Pesa STK Push
+                                                </p>
+                                                <p className="text-sm text-muted">
+                                                    You will receive a prompt on <strong className="text-foreground">{formData.phone || 'your phone'}</strong> to complete payment.
+                                                </p>
+                                            </div>
+                                        </div>
                                         {mpesaStatus && (
-                                            <p className={`text-sm font-semibold ${mpesaStatus.includes('Failed') || mpesaStatus.includes('Error') ? 'text-red-500' : 'text-green-500'}`}>
+                                            <p className={`text-sm font-semibold ${mpesaStatus.includes('Failed') || mpesaStatus.includes('Error') ? 'text-danger' : 'text-success'}`}>
                                                 {mpesaStatus}
                                             </p>
                                         )}
@@ -467,17 +481,17 @@ export default function CheckoutPage() {
                                 )}
 
                                 {paymentMethod === 'card' && (
-                                    <div className="mt-6 p-4 bg-[var(--color-primary-light)] rounded-lg border border-white/10">
-                                        <p className="text-sm text-[var(--color-neutral-400)]">
+                                    <div className="mt-6 p-4 bg-surface rounded-lg border border-border">
+                                        <p className="text-sm text-muted">
                                             You will be redirected to a secure payment gateway to complete your transaction.
                                         </p>
                                     </div>
                                 )}
 
                                 {paymentMethod === 'cod' && (
-                                    <div className="mt-6 p-4 bg-[var(--color-primary-light)] rounded-lg border border-white/10">
-                                        <p className="text-sm text-[var(--color-neutral-400)]">
-                                            Pay with cash when your order is delivered. Additional Ksh 100 handling fee applies.
+                                    <div className="mt-6 p-4 bg-surface rounded-lg border border-border">
+                                        <p className="text-sm text-muted">
+                                            Pay with cash when your order is delivered. Additional KSh 100 handling fee applies.
                                         </p>
                                     </div>
                                 )}
@@ -567,7 +581,7 @@ export default function CheckoutPage() {
                                 <button
                                     type="submit"
                                     disabled={isProcessing}
-                                    className="btn-primary w-full py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                                    className="btn-accent w-full py-4 text-base disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                                 >
                                     {isProcessing ? (
                                         <>
@@ -583,7 +597,7 @@ export default function CheckoutPage() {
                                 </button>
 
                                 {/* Security Badge */}
-                                <div className="text-center text-xs text-[var(--color-neutral-500)]">
+                                <div className="text-center text-xs text-muted">
                                     <span className="inline-flex items-center gap-1">
                                         🔒 Secure checkout powered by Mirall Technology
                                     </span>
