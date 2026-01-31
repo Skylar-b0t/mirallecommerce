@@ -1,10 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { ShoppingCart, Star, Eye } from 'lucide-react';
+import { ShoppingCart, Star } from 'lucide-react';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import { addToCart } from '@/lib/redux/cartSlice';
 import Image from 'next/image';
+import PriceDisplay from '@/components/ui/PriceDisplay';
+import TrustBadge from '@/components/ui/TrustBadge';
 
 interface Product {
     _id: string;
@@ -44,81 +46,79 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
         }
     };
 
-    const discount = product.stock < 5 ? 10 : 0; // Simulated discount logic for demo
+    const discount = product.stock < 5 ? 10 : 0; // Simulated discount logic
+    const originalPrice = discount > 0 ? Math.round(product.price * 1.1) : undefined;
 
     return (
-        <div className="group relative bg-white dark:bg-slate-900 rounded-2xl border border-gray-100 dark:border-white/5 overflow-hidden hover:shadow-soft-lg hover:border-primary/20 transition-all duration-300 hover:translate-y-[-4px]">
+        <div className="surface-card overflow-hidden hover:shadow-md transition-shadow duration-200">
             {/* Image Container */}
-            <Link href={`/products/${product._id}`} className="block relative aspect-[4/5] bg-gray-50 dark:bg-white/5 overflow-hidden">
-                {/* Badges */}
-                <div className="absolute top-3 left-3 z-10 flex flex-col gap-2">
-                    {product.stock <= 5 && product.stock > 0 && (
-                        <span className="badge badge-warning text-xs shadow-sm bg-amber-100 text-amber-700 border-none">
+            <Link href={`/products/${product._id}`} className="block relative aspect-[4/5] bg-gray-50 overflow-hidden">
+                {/* Stock Badge */}
+                {product.stock <= 5 && product.stock > 0 && (
+                    <div className="absolute top-3 left-3 z-10">
+                        <span className="badge badge-warning text-xs">
                             Low Stock
                         </span>
-                    )}
-                    {discount > 0 && (
-                        <span className="badge bg-red-500 text-white border-none text-xs shadow-sm">
-                            -10%
-                        </span>
-                    )}
-                </div>
+                    </div>
+                )}
 
                 {product.images?.[0] ? (
                     <Image
                         src={product.images[0]}
                         alt={product.name}
                         fill
-                        className="object-contain p-6 group-hover:scale-110 transition-transform duration-500"
+                        className="object-contain p-6"
                         priority={priority}
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                 ) : (
                     <div className="absolute inset-0 flex items-center justify-center text-4xl">📱</div>
                 )}
-
-                {/* Overlay Action */}
-                <div className="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300">
-                    <button
-                        onClick={handleAddToCart}
-                        disabled={product.stock === 0}
-                        className="w-full btn-primary py-3 flex items-center justify-center gap-2 shadow-xl"
-                    >
-                        {product.stock > 0 ? (
-                            <>
-                                <ShoppingCart className="w-4 h-4" /> Add to Cart
-                            </>
-                        ) : (
-                            'Out of Stock'
-                        )}
-                    </button>
-                </div>
             </Link>
 
             {/* Content */}
             <div className="p-4">
                 <div className="flex items-center justify-between mb-2">
                     <p className="text-xs font-semibold text-primary uppercase tracking-wider">{product.brand}</p>
-                    <div className="flex items-center gap-1 text-amber-400">
+                    <div className="flex items-center gap-1 text-amber-500">
                         <Star className="w-3.5 h-3.5 fill-current" />
-                        <span className="text-xs font-medium text-neutral-600 dark:text-neutral-400">{product.rating}</span>
+                        <span className="text-xs font-medium text-muted">{product.rating}</span>
                     </div>
                 </div>
 
-                <Link href={`/products/${product._id}`} className="block group-hover:text-primary transition-colors">
-                    <h3 className="font-semibold text-foreground truncate">{product.name}</h3>
+                <Link href={`/products/${product._id}`}>
+                    <h3 className="font-semibold text-foreground line-clamp-2 mb-2 min-h-[2.5rem]">{product.name}</h3>
                 </Link>
 
-                <div className="mt-2 flex items-baseline gap-2">
-                    <span className="text-lg font-bold text-foreground">
-                        Ksh {product.price.toLocaleString()}
-                    </span>
-                    {discount > 0 && (
-                        <span className="text-sm text-neutral-400 line-through">
-                            Ksh {Math.round(product.price * 1.1).toLocaleString()}
-                        </span>
-                    )}
+                <PriceDisplay
+                    price={product.price}
+                    originalPrice={originalPrice}
+                    className="mb-3"
+                />
+
+                {/* Trust Signals */}
+                <div className="flex flex-wrap gap-2 mb-3 text-xs">
+                    <TrustBadge icon="check" text="Genuine" />
+                    <TrustBadge icon="shield" text="1 Yr Warranty" />
                 </div>
+
+                {/* Add to Cart Button */}
+                <button
+                    onClick={handleAddToCart}
+                    disabled={product.stock === 0}
+                    className={`w-full py-2.5 px-4 rounded-lg font-medium transition-all duration-200 flex items-center justify-center gap-2 min-h-[44px] ${product.stock > 0
+                            ? 'bg-accent text-accent-foreground hover:opacity-90 active:scale-[0.98]'
+                            : 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        }`}
+                >
+                    {product.stock > 0 ? (
+                        <>
+                            <ShoppingCart className="w-4 h-4" /> Add to Cart
+                        </>
+                    ) : (
+                        'Out of Stock'
+                    )}
+                </button>
             </div>
         </div>
     );

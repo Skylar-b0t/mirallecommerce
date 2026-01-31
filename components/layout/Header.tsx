@@ -44,9 +44,9 @@ export default function Header() {
 
     return (
         <header
-            className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled || isMobileMenuOpen
-                ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-white/10 shadow-sm'
-                : 'bg-transparent border-b border-transparent'
+            className={`sticky top-0 left-0 right-0 z-50 transition-shadow duration-200 ${isScrolled || isMobileMenuOpen
+                ? 'bg-background border-b border-border shadow-sm'
+                : 'bg-background border-b border-transparent'
                 }`}
         >
             <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[var(--header-height)]">
@@ -159,7 +159,7 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu Overlay */}
-            <div className={`fixed inset-0 bg-white dark:bg-slate-950 z-[60] lg:hidden transition-transform duration-300 pt-24 px-6 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+            <div className={`fixed inset-0 bg-background z-[60] lg:hidden transition-transform duration-300 pt-24 px-6 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
                 }`}>
                 <div className="flex flex-col gap-6">
                     <form onSubmit={handleSubmit} className="flex items-center gap-2 px-4 py-3 rounded-xl bg-gray-100 dark:bg-white/5 border border-transparent focus-within:border-primary">
