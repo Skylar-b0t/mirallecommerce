@@ -11,27 +11,34 @@ const config: Config = {
         extend: {
             colors: {
                 primary: {
-                    DEFAULT: "#4F46E5", // Indigo-600
-                    dark: "#6366F1",    // Indigo-500
-                    foreground: "#FFFFFF",
+                    DEFAULT: "hsl(215 85% 38%)",      // Deep blue
+                    dark: "hsl(215 85% 32%)",
+                    foreground: "hsl(0 0% 100%)",
                 },
-                secondary: {
-                    DEFAULT: "#EC4899", // Pink-500
-                    dark: "#F472B6",    // Pink-400
-                    foreground: "#FFFFFF",
+                accent: {
+                    DEFAULT: "hsl(32 90% 52%)",       // Warm amber (M-Pesa)
+                    foreground: "hsl(0 0% 10%)",
                 },
                 success: {
-                    DEFAULT: "#14B8A6", // Teal-500
-                    foreground: "#FFFFFF",
+                    DEFAULT: "hsl(145 63% 42%)",
+                    foreground: "hsl(0 0% 100%)",
                 },
                 warning: {
-                    DEFAULT: "#F59E0B", // Amber-500
-                    foreground: "#FFFFFF",
+                    DEFAULT: "hsl(38 92% 50%)",
+                    foreground: "hsl(0 0% 10%)",
                 },
-                background: "var(--background)",
-                foreground: "var(--foreground)",
-                surface: "var(--surface)",
-                "surface-foreground": "var(--surface-foreground)",
+                danger: {
+                    DEFAULT: "hsl(0 72% 50%)",
+                    foreground: "hsl(0 0% 100%)",
+                },
+                background: "hsl(var(--background))",
+                foreground: "hsl(var(--foreground))",
+                surface: "hsl(var(--surface))",
+                "surface-foreground": "hsl(var(--surface-foreground))",
+                border: "hsl(var(--border))",
+                muted: "hsl(var(--muted-foreground))",
+                price: "hsl(var(--price))",
+                "price-muted": "hsl(var(--price-muted))",
             },
             fontFamily: {
                 sans: ["var(--font-inter)", "system-ui", "sans-serif"],

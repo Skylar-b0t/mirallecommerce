@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #4F46E5;
-  --color-primary-foreground: #FFFFFF;
-  --color-primary-dark: #3730A3;
-  --color-primary-light: #EEF2FF;
+  --color-primary: hsl(215 85% 38%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-primary-dark: hsl(215 85% 32%);
 
-  --color-secondary: #EC4899;
-  --color-secondary-foreground: #FFFFFF;
+  --color-accent: hsl(32 90% 52%);
+  --color-accent-foreground: hsl(0 0% 10%);
 
-  --color-success: #14B8A6;
-  --color-warning: #F59E0B;
-  --color-ring: #4F46E5;
+  --color-success: hsl(145 63% 42%);
+  --color-warning: hsl(38 92% 50%);
+  --color-danger: hsl(0 72% 50%);
+  --color-ring: hsl(215 85% 38%);
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -51,61 +51,101 @@
   }
 }
 
-/* Base Variables */
+/* Base Variables - Kenyan Market Trust-Focused Design */
 :root {
-  --background: #F1F5F9;
-  /* Slate-100 (Was FAFAFA/Zinc-50 - Too light) */
-  --foreground: #020617;
-  /* Slate-950 (Was Slate-900 - Darker) */
-  --surface: #FFFFFF;
-  --surface-foreground: #334155;
-  /* Slate-700 */
-  --primary: #4F46E5;
+  /* Brand Colors */
+  --primary: 215 85% 38%;
+  /* Deep blue - trust, technology */
+  --primary-foreground: 0 0% 100%;
+
+  --accent: 32 90% 52%;
+  /* Warm amber - action, M-Pesa */
+  --accent-foreground: 0 0% 10%;
+
+  /* UI Neutrals */
+  --background: 0 0% 100%;
+  /* Pure white */
+  --surface: 210 20% 98%;
+  /* Subtle grey for cards */
+  --border: 220 14% 90%;
+
+  /* Text */
+  --foreground: 220 20% 15%;
+  /* Dark grey */
+  --muted-foreground: 220 10% 45%;
+
+  /* States */
+  --success: 145 63% 42%;
+  --warning: 38 92% 50%;
+  --danger: 0 72% 50%;
+
+  /* Pricing */
+  --price: 215 85% 32%;
+  /* Darker blue for prices */
+  --price-muted: 220 10% 55%;
+  /* Muted for original prices */
 }
 
 .dark {
-  --background: #020617;
-  --foreground: #E2E8F0;
-  --surface: #0F172A;
-  --surface-foreground: #94A3B8;
+  --background: 220 20% 8%;
+  --foreground: 210 20% 95%;
+  --surface: 220 20% 12%;
+  --surface-foreground: 220 10% 70%;
+  --border: 220 14% 20%;
 }
 
-/* Utilities */
+/* Utilities - Commercial & Trust-Focused */
 @layer utilities {
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary-dark hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 px-6 py-3 rounded-xl font-medium shadow-soft cursor-pointer flex items-center justify-center;
+    @apply bg-[hsl(var(--primary))] text-[hsl(var(--primary-foreground))] hover:opacity-90 active:scale-[0.98] transition-all duration-200 px-6 py-3 rounded-lg font-medium shadow-sm cursor-pointer flex items-center justify-center min-h-[44px];
+  }
+
+  .btn-accent {
+    @apply bg-[hsl(var(--accent))] text-[hsl(var(--accent-foreground))] hover:opacity-90 active:scale-[0.98] transition-all duration-200 px-6 py-3 rounded-lg font-semibold cursor-pointer flex items-center justify-center min-h-[44px];
   }
 
   .btn-secondary {
-    @apply bg-surface text-foreground border border-gray-200 dark:border-white/10 hover:bg-gray-50 dark:hover:bg-slate-800 hover:scale-[1.02] transition-all duration-300 px-6 py-3 rounded-xl font-medium cursor-pointer flex items-center justify-center;
+    @apply bg-[hsl(var(--surface))] text-[hsl(var(--foreground))] border border-[hsl(var(--border))] hover:bg-gray-50 active:scale-[0.98] transition-all duration-200 px-6 py-3 rounded-lg font-medium cursor-pointer flex items-center justify-center min-h-[44px];
   }
 
-  .glass-panel {
-    @apply bg-white/80 dark:bg-slate-900/70 backdrop-blur-xl border border-gray-200 dark:border-white/5 shadow-sm;
+  .surface-card {
+    @apply bg-[hsl(var(--surface))] shadow-sm rounded-lg border border-[hsl(var(--border))];
   }
 
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 
-  .surface-elevated {
-    @apply bg-surface shadow-soft rounded-2xl border border-gray-100 dark:border-white/5;
+  .price-primary {
+    @apply text-[hsl(var(--price))] font-bold text-2xl;
+  }
+
+  .price-muted {
+    @apply text-[hsl(var(--price-muted))] line-through text-sm;
+  }
+
+  .ksh {
+    @apply font-medium;
   }
 
   .badge {
-    @apply inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2;
+    @apply inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors;
   }
 
   .badge-neutral {
-    @apply border-transparent bg-gray-100 text-gray-900 hover:bg-gray-200/80;
+    @apply border-transparent bg-gray-100 text-gray-900;
   }
 
   .badge-warning {
-    @apply border-transparent bg-yellow-100 text-yellow-800 hover:bg-yellow-200/80;
+    @apply border-transparent bg-yellow-100 text-yellow-800;
   }
 
   .badge-success {
-    @apply border-transparent bg-green-100 text-green-800 hover:bg-green-200/80;
+    @apply border-transparent bg-green-100 text-green-800;
+  }
+
+  .trust-badge {
+    @apply inline-flex items-center gap-1.5 text-sm text-[hsl(var(--muted-foreground))];
   }
 }
 
