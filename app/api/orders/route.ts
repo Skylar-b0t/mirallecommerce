@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/db/mongodb';
 import Order from '@/models/Order';
 import User from '@/models/User';
@@ -13,9 +15,7 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ success: false, message: 'No order items' }, { status: 400 });
         }
 
-        // Handle User (Guest Checkout)
-        // In a real app with Auth, we would get the user from the session.
-        // Here we will find or create a user based on email.
+        // Handle User (Guest Checkout vs Logged In)
         let userId = data.user;
 
         if (!userId && data.shippingAddress && data.shippingAddress.email) {
@@ -24,7 +24,6 @@ export async function POST(req: NextRequest) {
 
             if (!user) {
                 // Create a guest user
-                // We generate a random password since they are guest
                 user = await User.create({
                     name: `${data.shippingAddress.firstName} ${data.shippingAddress.lastName}`,
                     email: email,
@@ -51,7 +50,7 @@ export async function POST(req: NextRequest) {
             shippingAddress: {
                 street: data.shippingAddress.address,
                 city: data.shippingAddress.city,
-                state: data.shippingAddress.city, // Using city as state for simplified form
+                state: data.shippingAddress.city,
                 zipCode: data.shippingAddress.postalCode || '00000',
                 country: 'Kenya',
             },
@@ -62,7 +61,7 @@ export async function POST(req: NextRequest) {
             totalPrice: data.totalPrice,
             isPaid: false,
             isDelivered: false,
-            status: 'pending', // Case sensitive enum match
+            status: 'pending',
         });
 
         return NextResponse.json({ success: true, data: order });
@@ -74,8 +73,24 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
     try {
+        const session = await getServerSession(authOptions);
+
+        if (!session || !session.user) {
+            return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+        }
+
         await dbConnect();
-        const orders = await Order.find({}).populate('user', 'name email').sort({ createdAt: -1 }).limit(10);
+
+        // If admin, return all orders. If user, return only own orders.
+        let query = {};
+        if ((session.user as any).role !== 'admin') {
+            query = { user: (session.user as any).id };
+        }
+
+        const orders = await Order.find(query)
+            .populate('user', 'name email')
+            .sort({ createdAt: -1 });
+
         return NextResponse.json({ success: true, data: orders });
     } catch (error: any) {
         return NextResponse.json({ success: false, message: error.message }, { status: 500 });

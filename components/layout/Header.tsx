@@ -1,168 +1,237 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Search, ShoppingCart, User, Menu, X } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useSession, signOut } from 'next-auth/react';
+import { Search, ShoppingCart, User, Menu, X, LogIn, LogOut, ChevronRight, Package, Truck, Info, Phone } from 'lucide-react';
 import { useAppSelector } from '@/lib/redux/hooks';
+import { ThemeToggle } from '../ui/ThemeToggle';
 
 export default function Header() {
-    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const pathname = usePathname();
+    const router = useRouter();
     const { totalItems } = useAppSelector((state) => state.cart);
+    const { data: session } = useSession();
 
-    const categories = [
-        'Laptops',
-        'Smartphones',
-        'Audio',
-        'Cameras',
-        'Wearables',
-        'Accessories',
+    useEffect(() => {
+        const handleScroll = () => {
+            setIsScrolled(window.scrollY > 20);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const navLinks = [
+        { name: 'Laptops', href: '/products?category=Laptops' },
+        { name: 'Smartphones', href: '/products?category=Smartphones' },
+        { name: 'Audio', href: '/products?category=Audio' },
+        { name: 'Cameras', href: '/products?category=Cameras' },
+        { name: 'Wearables', href: '/products?category=Wearables' },
+        { name: 'Accessories', href: '/products?category=Accessories' },
+        { name: 'Contact Us', href: '/contact' },
     ];
 
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const query = (e.currentTarget.elements.namedItem('search') as HTMLInputElement).value;
+        if (query.trim()) {
+            router.push(`/products?search=${encodeURIComponent(query)}`);
+        }
+    };
+
     return (
-        <header className="sticky top-0 z-50 surface-elevated backdrop-blur-md bg-[var(--color-surface)]/95">
-            {/* Top Bar - Trust Signals */}
-            <div className="border-b border-white/5">
-                <div className="container-premium">
-                    <div className="flex items-center justify-between h-10 text-xs">
-                        <div className="flex items-center gap-6 text-[var(--color-neutral-400)]">
-                            <span className="hidden md:inline">Free shipping on orders over Ksh 10,000</span>
-                            <span className="hidden lg:inline">•</span>
-                            <span className="hidden lg:inline">30-day returns</span>
-                        </div>
-                        <div className="flex items-center gap-4 text-[var(--color-neutral-400)]">
-                            <Link href="/support" className="hover:text-[var(--color-neutral-200)] transition-colors">
-                                Support
-                            </Link>
-                            <span className="hidden sm:inline">•</span>
-                            <Link href="/track" className="hidden sm:inline hover:text-[var(--color-neutral-200)] transition-colors">
-                                Track Order
-                            </Link>
-                        </div>
+        <header
+            className={`sticky top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled || isMobileMenuOpen
+                ? 'bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border-b border-gray-200 dark:border-white/10 shadow-sm'
+                : 'bg-transparent border-b border-transparent'
+                }`}
+        >
+            <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[var(--header-height)]">
+                {/* Logo */}
+                <Link href="/" className="flex items-center gap-2 group z-50">
+                    <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary/25 group-hover:scale-105 transition-transform duration-300">
+                        M
                     </div>
-                </div>
-            </div>
+                    <span className="font-display font-bold text-xl tracking-tight text-foreground">
+                        Mirall<span className="text-primary">.</span>
+                    </span>
+                </Link>
 
-            {/* Main Header */}
-            <div className="container-premium">
-                <div className="flex items-center justify-between h-[var(--header-height)]">
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-2 group">
-                        <div className="w-8 h-8 bg-[var(--color-accent)] rounded-lg flex items-center justify-center transition-transform group-hover:scale-105">
-                            <span className="text-white font-bold text-lg">M</span>
-                        </div>
-                        <span className="text-xl font-semibold tracking-tight text-[var(--color-neutral-50)]">
-                            Mirall
-                        </span>
-                    </Link>
-
-                    {/* Desktop Navigation */}
-                    <nav className="hidden lg:flex items-center gap-1">
-                        {categories.map((category) => (
-                            <Link
-                                key={category}
-                                href={`/products?category=${category}`}
-                                className="px-4 py-2 text-sm font-medium text-[var(--color-neutral-300)] hover:text-[var(--color-neutral-50)] hover:bg-white/5 rounded-lg transition-all"
-                            >
-                                {category}
-                            </Link>
-                        ))}
-                    </nav>
-
-                    {/* Search Bar - Desktop */}
-                    <div className="hidden md:flex items-center flex-1 max-w-md mx-8">
-                        <div className="relative w-full">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-neutral-500)]" />
-                            <input
-                                type="text"
-                                placeholder="Search products..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary-light)] border border-white/10 rounded-lg text-sm text-[var(--color-neutral-100)] placeholder:text-[var(--color-neutral-500)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 transition-all"
-                            />
-                        </div>
-                    </div>
-
-                    {/* Actions */}
-                    <div className="flex items-center gap-3">
-                        {/* Mobile Menu Toggle */}
-                        <button
-                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                            className="lg:hidden p-2 hover:bg-white/5 rounded-lg transition-colors"
-                            aria-label="Toggle menu"
-                        >
-                            {mobileMenuOpen ? (
-                                <X className="w-5 h-5 text-[var(--color-neutral-300)]" />
-                            ) : (
-                                <Menu className="w-5 h-5 text-[var(--color-neutral-300)]" />
-                            )}
-                        </button>
-
-                        {/* Account */}
+                {/* Desktop Navigation */}
+                <nav className="hidden lg:flex items-center gap-5 xl:gap-8">
+                    {navLinks.map((link) => (
                         <Link
-                            href="/account"
-                            className="hidden sm:flex items-center gap-2 px-3 py-2 hover:bg-white/5 rounded-lg transition-colors group"
+                            key={link.name}
+                            href={link.href}
+                            className={`text-sm font-medium transition-colors hover:text-primary ${pathname === link.href ? 'text-primary' : 'text-neutral-600 dark:text-neutral-300'
+                                }`}
                         >
-                            <User className="w-5 h-5 text-[var(--color-neutral-400)] group-hover:text-[var(--color-neutral-200)]" />
+                            {link.name}
                         </Link>
+                    ))}
+                </nav>
 
-                        {/* Cart */}
+                {/* Right Actions */}
+                <div className="flex items-center gap-4">
+                    {/* Search - Desktop */}
+                    <form onSubmit={handleSubmit} className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-full bg-gray-100 dark:bg-white/5 border border-transparent focus-within:border-primary/50 focus-within:bg-white dark:focus-within:bg-black/20 focus-within:ring-2 focus-within:ring-primary/20 transition-all w-64">
+                        <Search className="w-4 h-4 text-neutral-400" />
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Search devices..."
+                            className="bg-transparent border-none outline-none text-sm text-foreground placeholder:text-neutral-400 w-full"
+                        />
+                    </form>
+
+                    <div className="hidden lg:flex items-center gap-3 pl-4 border-l border-gray-200 dark:border-white/10">
+                        <ThemeToggle />
+
+                        {session ? (
+                            <div className="relative group">
+                                <Link
+                                    href="/profile"
+                                    className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-neutral-600 dark:text-neutral-300 transition-colors"
+                                >
+                                    {session.user?.image ? (
+                                        <img src={session.user.image} alt={session.user.name || 'User'} className="w-8 h-8 rounded-full border border-gray-200 dark:border-white/10" />
+                                    ) : (
+                                        <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-semibold">
+                                            {session.user?.name?.charAt(0).toUpperCase() || 'U'}
+                                        </div>
+                                    )}
+                                </Link>
+                                {/* Dropdown */}
+                                <div className="absolute right-0 top-full mt-2 w-56 py-2 rounded-2xl bg-white dark:bg-slate-900 border border-gray-200 dark:border-white/10 shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all transform origin-top-right z-50">
+                                    <div className="px-4 py-3 border-b border-gray-100 dark:border-white/5 mb-2">
+                                        <p className="text-sm font-medium text-foreground truncate">{session.user?.name}</p>
+                                        <p className="text-xs text-neutral-500 truncate">{session.user?.email}</p>
+                                    </div>
+                                    <Link href="/profile" className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-600 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-primary">
+                                        <User className="w-4 h-4" /> Profile
+                                    </Link>
+                                    <Link href="/orders" className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-600 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-primary">
+                                        <Package className="w-4 h-4" /> Orders
+                                    </Link>
+                                    {(session.user as any).role === 'admin' && (
+                                        <Link href="/admin/products" className="flex items-center gap-2 px-4 py-2 text-sm text-neutral-600 dark:text-neutral-300 hover:bg-gray-50 dark:hover:bg-white/5 hover:text-primary">
+                                            <ChevronRight className="w-4 h-4" /> Admin Dashboard
+                                        </Link>
+                                    )}
+                                    <button
+                                        onClick={() => signOut()}
+                                        className="w-full text-left flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/10 mt-2"
+                                    >
+                                        <LogOut className="w-4 h-4" /> Sign out
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <Link href="/login" className="btn-primary py-2 px-4 text-sm shadow-md shadow-primary/20">
+                                Sign In
+                            </Link>
+                        )}
+
                         <Link
                             href="/cart"
-                            className="relative flex items-center gap-2 px-3 py-2 hover:bg-white/5 rounded-lg transition-colors group"
+                            className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-neutral-600 dark:text-neutral-300 transition-colors group"
                         >
-                            <ShoppingCart className="w-5 h-5 text-[var(--color-neutral-400)] group-hover:text-[var(--color-neutral-200)]" />
+                            <ShoppingCart className="w-6 h-6" />
                             {totalItems > 0 && (
-                                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[var(--color-accent)] text-white text-xs font-semibold rounded-full flex items-center justify-center">
+                                <span className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-secondary text-white text-[10px] font-bold flex items-center justify-center shadow-sm">
                                     {totalItems}
                                 </span>
                             )}
                         </Link>
                     </div>
-                </div>
 
-                {/* Mobile Search */}
-                <div className="md:hidden pb-4">
-                    <div className="relative">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--color-neutral-500)]" />
-                        <input
-                            type="text"
-                            placeholder="Search products..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            className="w-full pl-10 pr-4 py-2.5 bg-[var(--color-primary-light)] border border-white/10 rounded-lg text-sm text-[var(--color-neutral-100)] placeholder:text-[var(--color-neutral-500)] focus:outline-none focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 transition-all"
-                        />
-                    </div>
+                    {/* Mobile Menu Button */}
+                    <button
+                        className="lg:hidden p-2 text-neutral-600 dark:text-neutral-300"
+                        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    >
+                        {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+                    </button>
                 </div>
             </div>
 
-            {/* Mobile Menu */}
-            {mobileMenuOpen && (
-                <div className="lg:hidden border-t border-white/5 animate-fade-in">
-                    <div className="container-premium py-4">
-                        <nav className="flex flex-col gap-1">
-                            {categories.map((category) => (
-                                <Link
-                                    key={category}
-                                    href={`/products?category=${category}`}
-                                    onClick={() => setMobileMenuOpen(false)}
-                                    className="px-4 py-3 text-sm font-medium text-[var(--color-neutral-300)] hover:text-[var(--color-neutral-50)] hover:bg-white/5 rounded-lg transition-all"
-                                >
-                                    {category}
-                                </Link>
-                            ))}
-                            <div className="divider-subtle my-2" />
+            {/* Mobile Menu Overlay */}
+            <div className={`fixed inset-0 bg-white dark:bg-slate-950 z-[60] lg:hidden transition-transform duration-300 pt-24 px-6 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
+                }`}>
+                <div className="flex flex-col gap-6">
+                    <form onSubmit={handleSubmit} className="flex items-center gap-2 px-4 py-3 rounded-xl bg-gray-100 dark:bg-white/5 border border-transparent focus-within:border-primary">
+                        <Search className="w-5 h-5 text-neutral-400" />
+                        <input
+                            type="text"
+                            name="search"
+                            placeholder="Search..."
+                            className="bg-transparent border-none outline-none text-base text-foreground w-full"
+                        />
+                    </form>
+
+                    <div className="flex flex-col gap-2">
+                        {navLinks.map((link) => (
                             <Link
-                                href="/account"
-                                onClick={() => setMobileMenuOpen(false)}
-                                className="px-4 py-3 text-sm font-medium text-[var(--color-neutral-300)] hover:text-[var(--color-neutral-50)] hover:bg-white/5 rounded-lg transition-all"
+                                key={link.name}
+                                href={link.href}
+                                className="text-2xl font-semibold text-foreground py-2 border-b border-gray-100 dark:border-white/5"
+                                onClick={() => setIsMobileMenuOpen(false)}
                             >
-                                Account
+                                {link.name}
                             </Link>
-                        </nav>
+                        ))}
                     </div>
+
+                    <div className="flex items-center justify-between py-4 border-t border-gray-100 dark:border-white/5">
+                        <span className="text-neutral-500">Appearance</span>
+                        <ThemeToggle />
+                    </div>
+
+                    {session ? (
+                        <div className="flex flex-col gap-4">
+                            <div className="flex items-center gap-3">
+                                {session.user?.image ? (
+                                    <img src={session.user.image} alt="User" className="w-12 h-12 rounded-full" />
+                                ) : (
+                                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xl">
+                                        {session.user?.name?.charAt(0) || 'U'}
+                                    </div>
+                                )}
+                                <div>
+                                    <p className="font-bold text-lg text-foreground">{session.user?.name}</p>
+                                    <p className="text-sm text-neutral-500">{session.user?.email}</p>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-2 gap-3">
+                                <Link
+                                    href="/profile"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    className="p-3 rounded-xl bg-gray-100 dark:bg-white/5 text-center font-medium"
+                                >
+                                    Profile
+                                </Link>
+                                <button
+                                    onClick={() => signOut()}
+                                    className="p-3 rounded-xl bg-red-50 dark:bg-red-900/10 text-red-500 text-center font-medium"
+                                >
+                                    Sign Out
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <Link
+                            href="/login"
+                            className="btn-primary w-full text-center"
+                            onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                            Sign In
+                        </Link>
+                    )}
                 </div>
-            )}
+            </div>
         </header>
     );
 }

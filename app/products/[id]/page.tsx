@@ -255,7 +255,7 @@ export default function ProductDetailPage() {
                                     <h2 className="text-2xl font-bold mb-4">Shipping Information</h2>
                                     <div className="space-y-4 text-[var(--color-neutral-300)]">
                                         <p>
-                                            <strong className="text-[var(--color-neutral-100)]">Free Shipping:</strong> On all orders over $100
+                                            <strong className="text-[var(--color-neutral-100)]">Free Shipping:</strong> On all orders over Ksh 10,000
                                         </p>
                                         <p>
                                             <strong className="text-[var(--color-neutral-100)]">Standard Delivery:</strong> 3-5 business days

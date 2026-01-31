@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import dbConnect from '@/lib/db/mongodb';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import Product from '@/models/Product';
 
 export async function GET(request: NextRequest) {
@@ -90,10 +92,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
+        const session = await getServerSession(authOptions);
+        if (!session || (session.user as any).role !== 'admin') {
+            return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 401 });
+        }
+
         await dbConnect();
-
         const body = await request.json();
-
         const product = await Product.create(body);
 
         return NextResponse.json({

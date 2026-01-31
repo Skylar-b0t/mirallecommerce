@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useSession } from 'next-auth/react';
 import { useAppSelector, useAppDispatch } from '@/lib/redux/hooks';
 import { clearCart } from '@/lib/redux/cartSlice';
 import {
@@ -37,6 +38,7 @@ export default function CheckoutPage() {
     const router = useRouter();
     const dispatch = useAppDispatch();
     const { items, totalItems, totalPrice } = useAppSelector((state) => state.cart);
+    const { data: session } = useSession();
 
     const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('mpesa');
     const [isProcessing, setIsProcessing] = useState(false);
@@ -53,6 +55,19 @@ export default function CheckoutPage() {
         postalCode: '',
         notes: '',
     });
+
+    // Autofill user data if logged in
+    useEffect(() => {
+        if (session?.user) {
+            const names = session.user.name?.split(' ') || ['', ''];
+            setFormData(prev => ({
+                ...prev,
+                firstName: names[0] || '',
+                lastName: names.slice(1).join(' ') || '',
+                email: session.user?.email || '',
+            }));
+        }
+    }, [session]);
 
     const shippingCost = totalPrice >= 10000 ? 0 : 500;
     const taxRate = 0.16;
@@ -77,6 +92,7 @@ export default function CheckoutPage() {
                     shippingPrice: shippingCost,
                     taxPrice: taxAmount,
                     totalPrice: finalTotal,
+                    user: session?.user ? (session.user as any).id : undefined, // Explicitly pass user ID if logged in
                 }),
             });
             const data = await res.json();
@@ -100,17 +116,15 @@ export default function CheckoutPage() {
                 body: JSON.stringify({
                     phoneNumber: formData.phone,
                     amount: finalTotal,
-                    orderId: createdOrderId // Pass order ID so we can link it later if needed
+                    orderId: createdOrderId
                 })
             });
             const data = await res.json();
 
             if (data.success) {
                 setMpesaStatus('STK Push Sent! Check your phone to complete payment.');
-                setOrderId(createdOrderId); // Set order ID for confirmation screen
+                setOrderId(createdOrderId);
 
-                // In a real app, we would poll /api/orders/{id} for status update
-                // For now, allow manual confirmation or simulate success
                 await new Promise(resolve => setTimeout(resolve, 5000));
                 return true;
             } else {

@@ -88,6 +88,7 @@ const OrderSchema = new Schema<IOrder>(
             id: String,
             status: String,
             email: String,
+            update_time: String,
         },
         itemsPrice: {
             type: Number,

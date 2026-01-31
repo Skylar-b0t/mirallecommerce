@@ -1,8 +1,8 @@
 import Link from 'next/link';
-import { ArrowRight, Cpu, Smartphone, Camera, Headphones, Watch, Laptop } from 'lucide-react';
+import { ArrowRight, Cpu, Smartphone, Camera, Headphones, Watch, Laptop, Zap, Shield, Truck } from 'lucide-react';
 import dbConnect from '@/lib/db/mongodb';
-import Product, { IProduct } from '@/models/Product';
-import Image from 'next/image';
+import Product from '@/models/Product';
+import ProductCard from '@/components/products/ProductCard';
 
 export default async function HomePage() {
   await dbConnect();
@@ -15,117 +15,143 @@ export default async function HomePage() {
     {
       icon: Laptop,
       title: 'Laptops',
-      description: 'Professional workstations',
-      count: '120+ models',
+      description: 'Power & Portability',
+      count: '120+',
       href: '/products?category=Laptops',
+      color: 'text-blue-500',
+      bg: 'bg-blue-500/10'
     },
     {
       icon: Smartphone,
       title: 'Smartphones',
-      description: 'Latest flagship devices',
-      count: '85+ models',
+      description: 'Flagship Devices',
+      count: '85+',
       href: '/products?category=Smartphones',
+      color: 'text-purple-500',
+      bg: 'bg-purple-500/10'
     },
     {
       icon: Headphones,
       title: 'Audio',
-      description: 'Premium sound systems',
-      count: '60+ products',
+      description: 'Immersive Sound',
+      count: '60+',
       href: '/products?category=Audio',
+      color: 'text-pink-500',
+      bg: 'bg-pink-500/10'
     },
     {
       icon: Camera,
       title: 'Cameras',
-      description: 'Professional imaging',
-      count: '45+ models',
+      description: 'Capture Moments',
+      count: '45+',
       href: '/products?category=Cameras',
+      color: 'text-amber-500',
+      bg: 'bg-amber-500/10'
     },
     {
       icon: Watch,
       title: 'Wearables',
-      description: 'Smart accessories',
-      count: '30+ devices',
+      description: 'Stay Connected',
+      count: '30+',
       href: '/products?category=Wearables',
+      color: 'text-teal-500',
+      bg: 'bg-teal-500/10'
     },
     {
       icon: Cpu,
       title: 'Components',
-      description: 'Build your system',
-      count: '200+ parts',
+      description: 'Upgrade Your Rig',
+      count: '200+',
       href: '/products?category=Accessories',
+      color: 'text-indigo-500',
+      bg: 'bg-indigo-500/10'
     },
   ];
 
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-b from-[var(--color-surface)] to-[var(--color-background)]">
-        <div className="container-premium py-20 lg:py-32">
+    <div className="flex flex-col min-h-screen">
+      {/* Hero Section - Glassmorphic & Vibrant */}
+      <section className="relative overflow-hidden pt-10 pb-20 lg:pt-20 lg:pb-32">
+        {/* Background Gradients */}
+        <div className="absolute inset-0 bg-background z-0" />
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[100px] opacity-50 animate-pulse" />
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[100px] opacity-50" />
+
+        <div className="container-custom relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Hero Content */}
-            <div className="space-y-8 animate-fade-in">
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--color-primary-light)] border border-white/10 rounded-full">
-                <span className="w-2 h-2 bg-[var(--color-accent)] rounded-full animate-pulse" />
-                <span className="text-sm text-[var(--color-neutral-300)]">
-                  New arrivals • Free shipping on orders $100+
+            <div className="space-y-8 animate-fade-in text-center lg:text-left">
+              <div className="inline-flex items-center gap-2 px-4 py-2 bg-surface border border-neutral-200 dark:border-white/10 rounded-full shadow-sm mx-auto lg:mx-0">
+                <span className="w-2 h-2 bg-secondary rounded-full animate-ping" />
+                <span className="text-sm font-medium text-neutral-600 dark:text-neutral-300">
+                  New Series 7 Available Now
                 </span>
               </div>
 
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
-                Premium Electronics
-                <br />
-                <span className="text-gradient-accent">Built to Last</span>
+              <h1 className="leading-tight">
+                <span className="block text-neutral-900 dark:text-neutral-100">Future Tech,</span>
+                <span className="block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+                  Delivered Today.
+                </span>
               </h1>
 
-              <p className="text-lg text-[var(--color-neutral-400)] leading-relaxed max-w-xl">
-                Discover carefully curated electronics from leading brands.
-                Authorized reseller with expert support and 30-day returns.
+              <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                Experience the next generation of premium electronics.
+                Curated for performance, designed for you.
+                Authorized reseller for Apple, Samsung, Sony, and more.
               </p>
 
-              <div className="flex flex-wrap gap-4">
-                <Link href="/products" className="btn-primary inline-flex items-center gap-2">
-                  Explore Products
+              <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
+                <Link href="/products" className="btn-primary flex items-center gap-2 shadow-lg shadow-primary/25">
+                  Shop Now
                   <ArrowRight className="w-5 h-5" />
                 </Link>
-                <Link href="/about" className="btn-secondary inline-flex items-center gap-2">
-                  Why Mirall
+                <Link href="/about" className="btn-secondary">
+                  Learn More
                 </Link>
               </div>
 
-              {/* Stats */}
-              <div className="flex flex-wrap gap-8 pt-4">
-                <div>
-                  <div className="text-3xl font-bold text-[var(--color-neutral-50)]">500+</div>
-                  <div className="text-sm text-[var(--color-neutral-500)]">Premium Products</div>
+              <div className="pt-8 flex items-center justify-center lg:justify-start gap-8 text-sm font-medium text-neutral-500 dark:text-neutral-400">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-success" /> 2-Year Warranty
                 </div>
-                <div>
-                  <div className="text-3xl font-bold text-[var(--color-neutral-50)]">50K+</div>
-                  <div className="text-sm text-[var(--color-neutral-500)]">Happy Customers</div>
+                <div className="flex items-center gap-2">
+                  <Truck className="w-5 h-5 text-primary" /> Free Shipping
                 </div>
-                <div>
-                  <div className="text-3xl font-bold text-[var(--color-neutral-50)]">98%</div>
-                  <div className="text-sm text-[var(--color-neutral-500)]">Satisfaction Rate</div>
+                <div className="flex items-center gap-2">
+                  <Zap className="w-5 h-5 text-warning" /> Same-Day Delivery
                 </div>
               </div>
             </div>
 
-            {/* Hero Visual */}
-            <div className="relative lg:h-[600px] animate-slide-in-right">
-              <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent)]/20 to-transparent rounded-3xl blur-3xl" />
-              <div className="relative surface-elevated-hover rounded-2xl p-8 lg:p-12 h-full flex items-center justify-center">
-                <div className="text-center space-y-4">
-                  <div className="w-32 h-32 mx-auto bg-gradient-to-br from-[var(--color-accent)] to-blue-600 rounded-3xl flex items-center justify-center mb-6 shadow-[0_20px_60px_rgba(37,99,235,0.3)]">
-                    <Laptop className="w-16 h-16 text-white" />
+            {/* Hero Visual Card */}
+            <div className="relative animate-slide-in-right hidden lg:block">
+              <div className="glass-panel rounded-3xl p-8 relative overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-500 group">
+                {/* Decorative background for the card */}
+                <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 dark:from-white/5 dark:to-transparent z-0" />
+
+                <div className="relative z-10 flex flex-col items-center">
+                  <div className="w-full aspect-[16/10] bg-gradient-to-tr from-gray-100 to-gray-50 dark:from-slate-800 dark:to-slate-900 rounded-2xl mb-8 flex items-center justify-center overflow-hidden inner-shadow">
+                    <Laptop className="w-48 h-48 text-primary opacity-80 group-hover:scale-110 transition-transform duration-500" />
                   </div>
-                  <h3 className="text-2xl font-semibold text-[var(--color-neutral-50)]">
-                    Framework Laptop 16
-                  </h3>
-                  <p className="text-[var(--color-neutral-400)]">
-                    Modular. Repairable. Upgradeable.
-                  </p>
-                  <div className="flex items-center justify-center gap-4 pt-4">
-                    <span className="badge badge-success">In Stock</span>
-                    <span className="badge badge-neutral">Energy Star</span>
+
+                  <div className="text-center space-y-2">
+                    <h3 className="text-2xl font-bold text-foreground">MacBook Pro M3</h3>
+                    <p className="text-neutral-500">Mind-blowing. Head-turning.</p>
+                    <p className="font-bold text-xl text-primary mt-2">Ksh 250,000</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Floaties */}
+              <div className="absolute -top-6 -right-6 glass-panel p-4 rounded-2xl shadow-xl animate-bounce duration-[3000ms]">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success">
+                    <Zap className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-neutral-500 font-medium">Performance</p>
+                    <p className="text-sm font-bold text-foreground">+40% Faster</p>
                   </div>
                 </div>
               </div>
@@ -134,149 +160,84 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* Categories Grid */}
-      <section className="py-20 lg:py-32">
-        <div className="container-premium">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-              Shop by Category
-            </h2>
-            <p className="text-lg text-[var(--color-neutral-400)] max-w-2xl mx-auto">
-              Explore our carefully curated selection of premium electronics
+      {/* Categories Section */}
+      <section className="py-20 bg-surface/50">
+        <div className="container-custom">
+          <div className="flex items-center justify-between mb-12">
+            <h2 className="text-3xl font-bold text-foreground">Browse Categories</h2>
+            <Link href="/products" className="text-primary font-medium hover:underline flex items-center gap-1">
+              View All <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {featuredCategories.map((cat, i) => (
+              <Link
+                key={cat.title}
+                href={cat.href}
+                className="glass-panel p-6 rounded-2xl hover:border-primary/50 transition-all duration-300 group flex flex-col items-center text-center gap-4 hover:-translate-y-1"
+              >
+                <div className={`w-14 h-14 rounded-full ${cat.bg} flex items-center justify-center ${cat.color} group-hover:scale-110 transition-transform`}>
+                  <cat.icon className="w-7 h-7" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground text-sm">{cat.title}</h3>
+                  <p className="text-xs text-neutral-500 mt-1">{cat.count}</p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Trending Section */}
+      <section className="py-20">
+        <div className="container-custom">
+          <div className="text-center mb-12 space-y-4">
+            <h2 className="text-3xl md:text-5xl font-bold text-foreground">Trending Now</h2>
+            <p className="text-neutral-500 dark:text-neutral-400 max-w-2xl mx-auto">
+              The hottest tech that everyone is talking about. Grab them before they're gone.
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {featuredCategories.map((category, index) => (
-              <Link
-                key={category.title}
-                href={category.href}
-                className="surface-elevated-hover rounded-2xl p-8 group"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <div className="flex items-start justify-between mb-6">
-                  <div className="w-14 h-14 rounded-xl bg-[var(--color-primary-light)] border border-white/10 flex items-center justify-center group-hover:border-[var(--color-accent)]/30 transition-all">
-                    <category.icon className="w-7 h-7 text-[var(--color-accent)]" />
-                  </div>
-                  <ArrowRight className="w-5 h-5 text-[var(--color-neutral-500)] group-hover:text-[var(--color-accent)] group-hover:translate-x-1 transition-all" />
-                </div>
-
-                <h3 className="text-xl font-semibold text-[var(--color-neutral-50)] mb-2">
-                  {category.title}
-                </h3>
-                <p className="text-sm text-[var(--color-neutral-400)] mb-4">
-                  {category.description}
-                </p>
-                <div className="text-xs text-[var(--color-neutral-500)] font-medium">
-                  {category.count}
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Products Section */}
-      <section className="py-20 lg:py-32 bg-[var(--color-surface)]">
-        <div className="container-premium">
-          <div className="flex items-end justify-between mb-12">
-            <div>
-              <h2 className="text-4xl lg:text-5xl font-bold mb-4">
-                Trending Now
-              </h2>
-              <p className="text-lg text-[var(--color-neutral-400)]">
-                Most popular products this month
-              </p>
-            </div>
-            <Link
-              href="/products"
-              className="hidden md:inline-flex items-center gap-2 text-[var(--color-accent)] hover:gap-3 transition-all"
-            >
-              View All
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-
-          {/* Trending Products Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {trendingProducts.map((product: any, index: number) => (
-              <Link
-                key={product._id}
-                href={`/products/${product._id}`}
-                className="surface-elevated-hover rounded-2xl p-4 group flex flex-col h-full"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="aspect-square bg-white rounded-xl mb-4 relative overflow-hidden flex items-center justify-center p-4">
-                  {product.images && product.images[0] ? (
-                    <img
-                      src={product.images[0]}
-                      alt={product.name}
-                      className="object-contain w-full h-full group-hover:scale-110 transition-transform duration-500"
-                    />
-                  ) : (
-                    <Laptop className="w-16 h-16 text-[var(--color-neutral-600)]" />
-                  )}
-                  {product.stock <= 0 && (
-                    <div className="absolute top-2 right-2 badge badge-neutral text-xs font-bold">
-                      Out of Stock
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex-1 flex flex-col">
-                  <div className="text-xs text-[var(--color-accent)] font-medium mb-1">
-                    {product.category}
-                  </div>
-                  <h3 className="text-lg font-semibold text-[var(--color-neutral-50)] mb-1 line-clamp-2 group-hover:text-[var(--color-accent)] transition-colors">
-                    {product.name}
-                  </h3>
-                  <div className="mt-auto pt-4 flex items-center justify-between">
-                    <span className="text-xl font-bold text-[var(--color-neutral-50)]">
-                      Ksh {product.price.toLocaleString()}
-                    </span>
-                    <div className="w-8 h-8 rounded-full bg-[var(--color-primary-light)] flex items-center justify-center group-hover:bg-[var(--color-accent)] transition-colors">
-                      <ArrowRight className="w-4 h-4 text-[var(--color-neutral-50)]" />
-                    </div>
-                  </div>
-                </div>
-              </Link>
+            {trendingProducts.map((product: any) => (
+              <ProductCard key={product._id} product={product} />
             ))}
           </div>
 
-          <div className="text-center mt-12 md:hidden">
-            <Link
-              href="/products"
-              className="btn-primary inline-flex items-center gap-2"
-            >
-              View All Products
-              <ArrowRight className="w-5 h-5" />
+          <div className="mt-16 text-center">
+            <Link href="/products" className="btn-secondary inline-flex items-center gap-2">
+              Load More Products
             </Link>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 lg:py-32">
-        <div className="container-premium">
-          <div className="surface-elevated rounded-3xl p-12 lg:p-16 text-center relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-[var(--color-accent)]/10 to-transparent" />
-            <div className="relative z-10 max-w-3xl mx-auto space-y-6">
-              <h2 className="text-4xl lg:text-5xl font-bold">
-                Ready to upgrade your tech?
-              </h2>
-              <p className="text-lg text-[var(--color-neutral-400)]">
-                Join thousands of satisfied customers who trust Mirall Technology for their electronics needs.
+      {/* Newsletter / CTA */}
+      <section className="py-20 bg-primary/5 dark:bg-primary/5 border-t border-primary/10">
+        <div className="container-custom">
+          <div className="glass-panel rounded-3xl p-12 text-center relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary via-secondary to-primary" />
+
+            <div className="max-w-2xl mx-auto space-y-6 relative z-10">
+              <h2 className="text-3xl font-bold text-foreground">Stay Ahead of the Curve</h2>
+              <p className="text-neutral-600 dark:text-neutral-400">
+                Subscribe to our newsletter for exclusive deals, new arrivals, and tech news.
               </p>
-              <div className="flex flex-wrap gap-4 justify-center pt-4">
-                <Link href="/products" className="btn-primary inline-flex items-center gap-2">
-                  Start Shopping
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-                <Link href="/contact" className="btn-secondary">
-                  Contact Sales
-                </Link>
-              </div>
+
+              <form className="flex gap-4 max-w-md mx-auto">
+                <input
+                  type="email"
+                  placeholder="Enter your email"
+                  className="flex-1 px-4 py-3 rounded-xl bg-white dark:bg-black/20 border border-neutral-200 dark:border-white/10 focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+                <button className="btn-primary whitespace-nowrap">
+                  Subscribe
+                </button>
+              </form>
+              <p className="text-xs text-neutral-500">We respect your privacy. Unsubscribe anytime.</p>
             </div>
           </div>
         </div>
