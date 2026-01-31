@@ -157,77 +157,85 @@ export default function Header() {
             </div>
 
             {/* Mobile Menu Overlay */}
-            <div className={`fixed inset-0 bg-background z-[60] lg:hidden transition-transform duration-300 pt-24 px-6 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-                }`}>
-                <div className="flex flex-col gap-6">
-                    <form onSubmit={handleSubmit} className="flex items-center gap-2 px-4 py-3 rounded-xl bg-gray-100 dark:bg-white/5 border border-transparent focus-within:border-primary">
+            <div className={`fixed inset-0 bg-neutral-950 z-[100] lg:hidden transition-transform duration-300 md:duration-200 ${isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+                {/* Mobile Menu Header */}
+                <div className="flex items-center justify-between p-6 border-b border-white/10">
+                    <span className="text-xl font-bold text-white">Menu</span>
+                    <button
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className="p-2 text-neutral-400 hover:text-white transition-colors"
+                    >
+                        <X className="w-8 h-8" />
+                    </button>
+                </div>
+
+                <div className="flex flex-col gap-6 p-6 overflow-y-auto max-h-[calc(100vh-80px)]">
+                    <form onSubmit={handleSubmit} className="flex items-center gap-2 px-4 py-3 rounded-xl bg-white/10 border border-white/10 focus-within:border-accent transition-colors">
                         <Search className="w-5 h-5 text-neutral-400" />
                         <input
                             type="text"
                             name="search"
-                            placeholder="Search..."
-                            className="bg-transparent border-none outline-none text-base text-foreground w-full"
+                            placeholder="Search products..."
+                            className="bg-transparent border-none outline-none text-base text-white w-full placeholder:text-neutral-500"
                         />
                     </form>
 
-                    <div className="flex flex-col gap-2">
+                    <div className="flex flex-col gap-1">
                         {navLinks.map((link) => (
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="text-2xl font-semibold text-foreground py-2 border-b border-gray-100 dark:border-white/5"
+                                className="text-xl font-semibold text-neutral-200 hover:text-white hover:bg-white/5 py-4 px-4 rounded-lg transition-colors flex items-center justify-between group"
                                 onClick={() => setIsMobileMenuOpen(false)}
                             >
                                 {link.name}
+                                <ArrowRight className="w-5 h-5 text-neutral-600 group-hover:text-accent transition-colors" />
                             </Link>
                         ))}
                     </div>
 
-                    <div className="flex items-center justify-between py-4 border-t border-gray-100 dark:border-white/5">
-                        <span className="text-neutral-500">Appearance</span>
-                        <ThemeToggle />
-                    </div>
-
-                    {session ? (
-                        <div className="flex flex-col gap-4">
-                            <div className="flex items-center gap-3">
-                                {session.user?.image ? (
-                                    <img src={session.user.image} alt="User" className="w-12 h-12 rounded-full" />
-                                ) : (
-                                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xl">
-                                        {session.user?.name?.charAt(0) || 'U'}
-                                    </div>
-                                )}
-                                <div>
-                                    <p className="font-bold text-lg text-foreground">{session.user?.name}</p>
-                                    <p className="text-sm text-neutral-500">{session.user?.email}</p>
-                                </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-3">
+                    <div className="border-t border-white/10 pt-6 space-y-4">
+                        {status === 'authenticated' ? (
+                            <>
                                 <Link
                                     href="/profile"
+                                    className="flex items-center gap-3 text-neutral-200 py-2 hover:text-white transition-colors"
                                     onClick={() => setIsMobileMenuOpen(false)}
-                                    className="p-3 rounded-xl bg-gray-100 dark:bg-white/5 text-center font-medium"
                                 >
-                                    Profile
+                                    <User className="w-5 h-5" />
+                                    My Profile
                                 </Link>
                                 <button
                                     onClick={() => signOut()}
-                                    className="p-3 rounded-xl bg-red-50 dark:bg-red-900/10 text-red-500 text-center font-medium"
+                                    className="flex items-center gap-3 text-red-400 py-2 w-full hover:text-red-300 transition-colors"
                                 >
+                                    <LogOut className="w-5 h-5" />
                                     Sign Out
                                 </button>
+                            </>
+                        ) : (
+                            <div className="flex flex-col gap-3">
+                                <Link
+                                    href="/login"
+                                    className="btn-primary w-full text-center py-3 bg-white text-neutral-950 hover:bg-neutral-200 border-none"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    Sign In
+                                </Link>
+                                <Link
+                                    href="/register"
+                                    className="btn-secondary w-full text-center py-3 border-white/20 text-white hover:bg-white/10"
+                                    onClick={() => setIsMobileMenuOpen(false)}
+                                >
+                                    Create Account
+                                </Link>
                             </div>
+                        )}
+
+                        <div className="pt-4 pb-8">
+                            <ThemeToggle />
                         </div>
-                    ) : (
-                        <Link
-                            href="/login"
-                            className="btn-primary w-full text-center"
-                            onClick={() => setIsMobileMenuOpen(false)}
-                        >
-                            Sign In
-                        </Link>
-                    )}
+                    </div>
                 </div>
             </div>
         </header>
