@@ -98,7 +98,7 @@ export default function RootLayout({
           <AuthProvider>
             <StoreProvider>
               <Header />
-              <main className="flex-1">
+              <main className="flex-1 pt-[var(--header-height)]">
                 {children}
               </main>
               <Footer />
