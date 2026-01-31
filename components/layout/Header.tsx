@@ -44,14 +44,16 @@ export default function Header() {
 
     return (
         <header
-            className={`sticky top-0 left-0 right-0 z-50 bg-background border-b border-border transition-shadow duration-200 ${isScrolled || isMobileMenuOpen ? 'shadow-sm' : ''
-                }`}
+            className={`sticky top-0 left-0 right-0 z-50 transition-all duration-200 border-b border-border ${isMobileMenuOpen
+                ? 'shadow-sm bg-background'
+                : 'lg:bg-accent bg-background'
+                } ${isScrolled ? 'shadow-sm' : ''}`}
         >
             <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-[var(--header-height)]">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-2 group z-50">
-                    <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary/25 group-hover:scale-105 transition-transform duration-300">
-                        M
+                    <div className="w-10 h-10 rounded-xl overflow-hidden bg-primary flex items-center justify-center shadow-lg shadow-primary/25 group-hover:scale-105 transition-transform duration-300">
+                        <img src="/logo.jpeg" alt="Mirall" className="w-full h-full object-cover" />
                     </div>
                     <span className="font-display font-bold text-xl tracking-tight text-foreground">
                         Mirall<span className="text-primary">.</span>
@@ -64,7 +66,9 @@ export default function Header() {
                         <Link
                             key={link.name}
                             href={link.href}
-                            className={`text-sm font-medium transition-colors hover:text-primary ${pathname === link.href ? 'text-primary' : 'text-neutral-600 dark:text-neutral-300'
+                            className={`text-sm font-semibold transition-colors hover:scale-105 ${pathname === link.href
+                                ? 'text-primary border-b-2 border-primary font-bold'
+                                : 'lg:text-neutral-600 text-neutral-600 dark:text-neutral-300'
                                 }`}
                         >
                             {link.name}
@@ -75,13 +79,13 @@ export default function Header() {
                 {/* Right Actions */}
                 <div className="flex items-center gap-4">
                     {/* Search - Desktop */}
-                    <form onSubmit={handleSubmit} className="hidden lg:flex items-center gap-2 px-3 py-2 rounded-full bg-gray-100 dark:bg-white/5 border border-transparent focus-within:border-primary/50 focus-within:bg-white dark:focus-within:bg-black/20 focus-within:ring-2 focus-within:ring-primary/20 transition-all w-64">
-                        <Search className="w-4 h-4 text-neutral-400" />
+                    <form onSubmit={handleSubmit} className={`hidden lg:flex items-center gap-2 px-3 py-2 rounded-full border border-transparent focus-within:border-primary/50 focus-within:ring-2 focus-within:ring-primary/20 transition-all w-64 lg:bg-white/40 backdrop-blur-sm bg-gray-100 dark:bg-white/5 group`}>
+                        <Search className="w-4 h-4 lg:text-neutral-600 text-neutral-600" />
                         <input
                             type="text"
                             name="search"
                             placeholder="Search devices..."
-                            className="bg-transparent border-none outline-none text-sm text-foreground placeholder:text-neutral-400 w-full"
+                            className="bg-transparent border-none outline-none text-sm text-neutral-900 placeholder:text-neutral-500 w-full"
                         />
                     </form>
 
@@ -135,7 +139,7 @@ export default function Header() {
 
                         <Link
                             href="/cart"
-                            className="relative p-2 rounded-full hover:bg-gray-100 dark:hover:bg-white/5 text-neutral-600 dark:text-neutral-300 transition-colors group"
+                            className={`relative p-2 rounded-full transition-colors group lg:text-neutral-600 text-neutral-600 dark:text-neutral-300 lg:hover:bg-black/10 hover:bg-gray-100 dark:hover:bg-white/5`}
                         >
                             <ShoppingCart className="w-6 h-6" />
                             {totalItems > 0 && (

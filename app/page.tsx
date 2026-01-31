@@ -1,5 +1,6 @@
+import Image from 'next/image';
 import Link from 'next/link';
-import { ArrowRight, Cpu, Smartphone, Camera, Headphones, Watch, Laptop, Zap, Shield, Truck } from 'lucide-react';
+import { ArrowRight, Cpu, Smartphone, Camera, Headphones, Watch, Laptop, Zap, Shield, Truck, User } from 'lucide-react';
 import dbConnect from '@/lib/db/mongodb';
 import Product from '@/models/Product';
 import ProductCard from '@/components/products/ProductCard';
@@ -123,20 +124,27 @@ export default async function HomePage() {
             </div>
 
             {/* Hero Visual Card */}
-            <div className="relative animate-slide-in-right hidden lg:block">
-              <div className="glass-panel rounded-3xl p-8 relative overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-500 group">
+            <div className="relative animate-slide-in-right lg:block mb-12 lg:mb-0">
+              <div className="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl hover:scale-[1.02] transition-transform duration-500 group max-w-lg mx-auto lg:max-w-none">
                 {/* Decorative background for the card */}
                 <div className="absolute inset-0 bg-gradient-to-br from-white/40 to-white/0 dark:from-white/5 dark:to-transparent z-0" />
 
                 <div className="relative z-10 flex flex-col items-center">
-                  <div className="w-full aspect-[16/10] bg-gradient-to-tr from-gray-100 to-gray-50 dark:from-slate-800 dark:to-slate-900 rounded-2xl mb-8 flex items-center justify-center overflow-hidden inner-shadow">
-                    <Laptop className="w-48 h-48 text-primary opacity-80 group-hover:scale-110 transition-transform duration-500" />
+                  <div className="w-full aspect-[16/10] bg-gradient-to-tr from-gray-100 to-gray-50 dark:from-slate-800 dark:to-slate-900 rounded-2xl mb-6 lg:mb-8 flex items-center justify-center overflow-hidden inner-shadow relative">
+                    <Image
+                      src="/images/macbook-pro-m3.png"
+                      alt="MacBook Pro M3"
+                      fill
+                      className="object-contain p-4 group-hover:scale-110 transition-transform duration-500"
+                      priority
+                      sizes="(max-width: 1024px) 100vw, 50vw"
+                    />
                   </div>
 
                   <div className="text-center space-y-2">
-                    <h3 className="text-2xl font-bold text-foreground">MacBook Pro M3</h3>
-                    <p className="text-neutral-500">Mind-blowing. Head-turning.</p>
-                    <p className="font-bold text-xl text-primary mt-2">Ksh 250,000</p>
+                    <h3 className="text-xl lg:text-2xl font-bold text-foreground">MacBook Pro M3</h3>
+                    <p className="text-sm lg:text-base text-neutral-500">Mind-blowing. Head-turning.</p>
+                    <p className="font-bold text-lg lg:text-xl text-primary mt-2">Ksh 250,000</p>
                   </div>
                 </div>
               </div>
@@ -184,6 +192,88 @@ export default async function HomePage() {
                 </div>
               </Link>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Premium Spotlight Section */}
+      <section className="py-20 overflow-hidden">
+        <div className="container-custom">
+          <div className="relative rounded-[2.5rem] bg-neutral-900 border border-white/5 overflow-hidden shadow-2xl">
+            {/* Background Image/Aesthetic */}
+            <div className="absolute inset-0 z-0 opacity-40">
+              <Image
+                src="/images/spotlight-headphones.png"
+                alt="Spotlight Background"
+                fill
+                className="object-cover blur-3xl scale-110"
+                sizes="100vw"
+              />
+            </div>
+
+            <div className="relative z-10 grid lg:grid-cols-2 items-center">
+              {/* Content */}
+              <div className="p-8 lg:p-16 space-y-8 text-center lg:text-left order-2 lg:order-1">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-accent/20 border border-accent/20 text-accent text-xs font-bold tracking-widest uppercase">
+                  Premium Spotlight
+                </div>
+                <h2 className="text-4xl lg:text-6xl font-bold text-white leading-tight">
+                  Unmatched Sound. <br />
+                  <span className="text-accent">Pure Silence.</span>
+                </h2>
+                <p className="text-neutral-400 text-lg max-w-md mx-auto lg:mx-0">
+                  Discover the next evolution of wireless audio. Experience studio-quality sound with adaptive noise cancellation that tailors itself to your surroundings.
+                </p>
+                <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-4">
+                  <Link href="/products" className="btn-accent px-8">
+                    Explore Obsidian Series
+                  </Link>
+                  <div className="flex items-center gap-4 pl-4 border-l border-white/10 hidden sm:flex">
+                    <div className="flex -space-x-3">
+                      {[1, 2, 3].map((n) => (
+                        <div key={n} className="w-10 h-10 rounded-full border-2 border-neutral-900 bg-neutral-800 flex items-center justify-center overflow-hidden">
+                          <User className="w-5 h-5 text-neutral-500" />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="text-sm text-neutral-400">
+                      <span className="text-white font-bold">12k+</span> Happy Listeners
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Visual */}
+              <div className="relative aspect-square lg:aspect-auto lg:h-full min-h-[400px] order-1 lg:order-2 p-8 flex items-center justify-center overflow-hidden">
+                <div className="relative w-full h-full max-w-[500px] aspect-square animate-float group/image">
+                  <Image
+                    src="/images/spotlight-headphones.png"
+                    alt="Obsidian Wireless Headphones"
+                    fill
+                    className="object-contain transform transition-transform duration-700 group-hover/image:scale-110 drop-shadow-[0_20px_50px_rgba(251,191,36,0.3)]"
+                    sizes="(max-width: 1024px) 100vw, 50vw"
+                  />
+
+                  {/* Floating Tech Labels */}
+                  <div className="absolute top-1/4 -right-4 lg:-right-8 animate-bounce delay-700">
+                    <div className="glass-panel py-2 px-4 rounded-xl border border-white/10 shadow-xl backdrop-blur-md">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
+                        <span className="text-xs font-bold text-white">40h Battery</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="absolute bottom-1/4 -left-4 lg:-left-8 animate-bounce delay-300">
+                    <div className="glass-panel py-2 px-4 rounded-xl border border-white/10 shadow-xl backdrop-blur-md">
+                      <div className="flex items-center gap-2">
+                        <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
+                        <span className="text-xs font-bold text-white">Lossless Audio</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>

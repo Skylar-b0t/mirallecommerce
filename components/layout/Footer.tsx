@@ -3,25 +3,25 @@ import { Facebook, Twitter, Instagram, Mail, Phone, MapPin, ArrowRight, ShieldCh
 
 export default function Footer() {
     return (
-        <footer className="bg-neutral-950 text-white pt-20 pb-10 border-t border-white/10">
+        <footer className="bg-accent text-neutral-600 pt-20 pb-10 border-t border-black/5">
             <div className="container-custom">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-16">
                     {/* Brand */}
                     <div className="space-y-6">
                         <Link href="/" className="flex items-center gap-2">
-                            <div className="w-10 h-10 rounded-xl bg-primary flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-primary/20">
-                                M
+                            <div className="w-10 h-10 rounded-xl overflow-hidden bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+                                <img src="/logo.jpeg" alt="Mirall" className="w-full h-full object-cover" />
                             </div>
-                            <span className="font-display font-bold text-2xl tracking-tight text-white">
+                            <span className="font-display font-bold text-2xl tracking-tight text-neutral-900">
                                 Mirall<span className="text-primary">.</span>
                             </span>
                         </Link>
-                        <p className="text-neutral-400 leading-relaxed text-sm">
+                        <p className="text-neutral-600 leading-relaxed text-sm">
                             Your destination for premium electronics. We curate the latest tech from top brands, delivering innovation to your doorstep with exceptional service.
                         </p>
                         <div className="flex gap-4">
                             {[Facebook, Twitter, Instagram].map((Icon, i) => (
-                                <a key={i} href="#" className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-neutral-400 hover:bg-primary hover:text-white transition-all duration-300 border border-white/5 hover:border-primary">
+                                <a key={i} href="#" className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center text-neutral-600 hover:bg-primary hover:text-white transition-all duration-300 border border-black/5 hover:border-primary">
                                     <Icon className="w-4 h-4" />
                                 </a>
                             ))}
@@ -30,12 +30,12 @@ export default function Footer() {
 
                     {/* Quick Links */}
                     <div>
-                        <h3 className="font-bold text-lg text-white mb-6">Shop</h3>
+                        <h3 className="font-bold text-lg text-neutral-900 mb-6">Shop</h3>
                         <ul className="space-y-4">
                             {['Laptops', 'Smartphones', 'Audio', 'Cameras', 'Accessories'].map((item) => (
                                 <li key={item}>
-                                    <Link href={`/products?category=${item}`} className="text-neutral-400 hover:text-accent transition-colors flex items-center gap-2 group text-sm">
-                                        <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-accent" />
+                                    <Link href={`/products?category=${item}`} className="text-neutral-600 hover:text-primary transition-colors flex items-center gap-2 group text-sm">
+                                        <ArrowRight className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity text-primary" />
                                         {item}
                                     </Link>
                                 </li>
@@ -45,7 +45,7 @@ export default function Footer() {
 
                     {/* Support */}
                     <div>
-                        <h3 className="font-bold text-lg text-white mb-6">Support</h3>
+                        <h3 className="font-bold text-lg text-neutral-900 mb-6">Support</h3>
                         <ul className="space-y-4">
                             {[
                                 { name: 'Contact Us', href: '/contact' },
@@ -55,7 +55,7 @@ export default function Footer() {
                                 { name: 'Track Order', href: '/orders' },
                             ].map((link) => (
                                 <li key={link.name}>
-                                    <Link href={link.href} className="text-neutral-400 hover:text-accent transition-colors text-sm">
+                                    <Link href={link.href} className="text-neutral-600 hover:text-primary transition-colors text-sm">
                                         {link.name}
                                     </Link>
                                 </li>
@@ -65,17 +65,17 @@ export default function Footer() {
 
                     {/* Contact Info */}
                     <div>
-                        <h3 className="font-bold text-lg text-white mb-6">Contact Us</h3>
+                        <h3 className="font-bold text-lg text-neutral-900 mb-6">Contact Us</h3>
                         <ul className="space-y-5">
                             <li className="flex items-start gap-4">
                                 <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 text-primary border border-primary/20">
                                     <MapPin className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="font-medium text-white text-sm">Our Location</p>
-                                    <p className="text-sm text-neutral-400 mt-1">Mirall Technology HQ</p>
-                                    <p className="text-sm text-neutral-400">Westlands Commercial Centre</p>
-                                    <p className="text-sm text-neutral-400">Nairobi, Kenya</p>
+                                    <p className="font-medium text-neutral-900 text-sm">Our Location</p>
+                                    <p className="text-sm text-neutral-600 mt-1">Mirall Technology HQ</p>
+                                    <p className="text-sm text-neutral-600">Westlands Commercial Centre</p>
+                                    <p className="text-sm text-neutral-600">Nairobi, Kenya</p>
                                 </div>
                             </li>
                             <li className="flex items-start gap-4">
@@ -83,8 +83,8 @@ export default function Footer() {
                                     <Phone className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="font-medium text-white text-sm">Call Us</p>
-                                    <p className="text-sm text-neutral-400 mt-1">+254 718 511 118</p>
+                                    <p className="font-medium text-neutral-900 text-sm">Call Us</p>
+                                    <p className="text-sm text-neutral-600 mt-1">+254 718 511 118</p>
                                     <p className="text-xs text-neutral-500">Mon-Fri: 8am - 5pm</p>
                                     <p className="text-xs text-neutral-500">Weekends: 9am - 2pm</p>
                                 </div>
@@ -94,8 +94,8 @@ export default function Footer() {
                                     <Mail className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <p className="font-medium text-white text-sm">Email Us</p>
-                                    <p className="text-sm text-neutral-400 mt-1">hello@mirallecommerce.com</p>
+                                    <p className="font-medium text-neutral-900 text-sm">Email Us</p>
+                                    <p className="text-sm text-neutral-600 mt-1">hello@mirallecommerce.com</p>
                                 </div>
                             </li>
                         </ul>
@@ -136,12 +136,12 @@ export default function Footer() {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500">
+                <div className="border-t border-black/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-neutral-500">
                     <p>&copy; {new Date().getFullYear()} Mirall Technology. All rights reserved.</p>
                     <div className="flex gap-6">
-                        <Link href="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
-                        <Link href="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
-                        <Link href="/sitemap" className="hover:text-white transition-colors">Sitemap</Link>
+                        <Link href="/privacy" className="hover:text-neutral-900 transition-colors">Privacy Policy</Link>
+                        <Link href="/terms" className="hover:text-neutral-900 transition-colors">Terms of Service</Link>
+                        <Link href="/sitemap" className="hover:text-neutral-900 transition-colors">Sitemap</Link>
                     </div>
                 </div>
             </div>

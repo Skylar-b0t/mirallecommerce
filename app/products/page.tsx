@@ -65,17 +65,41 @@ function ProductsContent() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
+    const category = searchParams.get('category');
+
+    const getPageTitle = () => {
+        if (!category) return 'All Products';
+        return category.charAt(0).toUpperCase() + category.slice(1);
+    };
+
+    const getPageDescription = () => {
+        if (!category) {
+            return 'Discover our complete collection of premium electronics. From flagship smartphones to high-performance workstations.';
+        }
+
+        const descriptions: Record<string, string> = {
+            laptops: 'High-performance laptops for work, gaming, and creativity. Top brands, best prices.',
+            smartphones: 'Latest flagship smartphones with cutting-edge technology and premium features.',
+            audio: 'Immersive audio experience with premium headphones, earbuds, and speakers.',
+            cameras: 'Capture life\'s moments with professional-grade cameras and photography equipment.',
+            accessories: 'Essential accessories to enhance your devices and tech lifestyle.',
+            tablets: 'Versatile tablets for productivity and entertainment on the go.',
+            gaming: 'Level up with high-performance gaming gear and consoles.',
+        };
+
+        return descriptions[category.toLowerCase()] || `Discover our premium selection of ${category.toLowerCase()}. Genuine products with warranty.`;
+    };
+
     return (
         <div className="min-h-screen bg-background text-foreground">
             {/* Header */}
             <div className="bg-surface border-b border-gray-200 dark:border-white/5 py-12 md:py-16">
                 <div className="container-custom">
                     <h1 className="text-4xl lg:text-5xl font-bold mb-3 text-foreground">
-                        All Products
+                        {getPageTitle()}
                     </h1>
                     <p className="text-lg text-neutral-500 dark:text-neutral-400 max-w-2xl">
-                        Discover our complete collection of premium electronics.
-                        From flagship smartphones to high-performance workstations.
+                        {getPageDescription()}
                     </p>
                 </div>
             </div>
