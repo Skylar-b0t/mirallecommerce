@@ -73,7 +73,8 @@ export default function Footer() {
                                 </div>
                                 <div>
                                     <p className="font-medium text-white text-sm">Our Location</p>
-                                    <p className="text-sm text-neutral-400 mt-1">Mirall Plaza, Westlands</p>
+                                    <p className="text-sm text-neutral-400 mt-1">Mirall Technology HQ</p>
+                                    <p className="text-sm text-neutral-400">Westlands Commercial Centre</p>
                                     <p className="text-sm text-neutral-400">Nairobi, Kenya</p>
                                 </div>
                             </li>
@@ -83,8 +84,9 @@ export default function Footer() {
                                 </div>
                                 <div>
                                     <p className="font-medium text-white text-sm">Call Us</p>
-                                    <p className="text-sm text-neutral-400 mt-1">+254 700 000 000</p>
-                                    <p className="text-xs text-neutral-500">Mon-Sat: 8am - 6pm</p>
+                                    <p className="text-sm text-neutral-400 mt-1">+254 718 511 118</p>
+                                    <p className="text-xs text-neutral-500">Mon-Fri: 8am - 5pm</p>
+                                    <p className="text-xs text-neutral-500">Weekends: 9am - 2pm</p>
                                 </div>
                             </li>
                             <li className="flex items-start gap-4">
@@ -93,7 +95,7 @@ export default function Footer() {
                                 </div>
                                 <div>
                                     <p className="font-medium text-white text-sm">Email Us</p>
-                                    <p className="text-sm text-neutral-400 mt-1">support@mirall.co.ke</p>
+                                    <p className="text-sm text-neutral-400 mt-1">hello@mirallecommerce.com</p>
                                 </div>
                             </li>
                         </ul>
