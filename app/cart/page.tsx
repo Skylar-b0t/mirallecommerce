@@ -34,14 +34,14 @@ export default function CartPage() {
         return (
             <div className="min-h-screen flex items-center justify-center py-20">
                 <div className="text-center max-w-md">
-                    <div className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-[var(--color-surface)] border border-white/10 flex items-center justify-center">
-                        <ShoppingBag className="w-12 h-12 text-[var(--color-neutral-600)]" />
+                    <div className="w-24 h-24 mx-auto mb-6 rounded-2xl bg-surface border border-border flex items-center justify-center">
+                        <ShoppingBag className="w-12 h-12 text-muted" />
                     </div>
                     <h2 className="text-3xl font-bold mb-3">Your cart is empty</h2>
-                    <p className="text-[var(--color-neutral-400)] mb-8">
+                    <p className="text-muted mb-8">
                         Discover our premium electronics and start building your perfect setup
                     </p>
-                    <Link href="/products" className="btn-primary inline-flex items-center gap-2">
+                    <Link href="/products" className="btn-accent inline-flex items-center gap-2">
                         Start Shopping
                         <ArrowRight className="w-5 h-5" />
                     </Link>
@@ -56,7 +56,7 @@ export default function CartPage() {
                 {/* Header */}
                 <div className="mb-8">
                     <h1 className="text-4xl lg:text-5xl font-bold mb-3">Shopping Cart</h1>
-                    <p className="text-lg text-[var(--color-neutral-400)]">
+                    <p className="text-lg text-muted">
                         {totalItems} {totalItems === 1 ? 'item' : 'items'} in your cart
                     </p>
                 </div>
@@ -68,7 +68,7 @@ export default function CartPage() {
                         <div className="flex justify-end">
                             <button
                                 onClick={handleClearCart}
-                                className="text-sm text-[var(--color-neutral-400)] hover:text-red-500 transition-colors"
+                                className="text-sm text-muted hover:text-danger transition-colors"
                             >
                                 Clear all items
                             </button>
@@ -77,11 +77,11 @@ export default function CartPage() {
                         {items.map((item) => (
                             <div
                                 key={item.id}
-                                className="surface-elevated rounded-xl p-6"
+                                className="surface-card rounded-xl p-6"
                             >
                                 <div className="flex gap-6">
                                     {/* Product Image */}
-                                    <div className="w-24 h-24 flex-shrink-0 bg-[var(--color-primary-light)] rounded-lg flex items-center justify-center p-2">
+                                    <div className="w-24 h-24 flex-shrink-0 bg-surface rounded-lg flex items-center justify-center p-2">
                                         {item.image ? (
                                             <img
                                                 src={item.image}
@@ -95,16 +95,16 @@ export default function CartPage() {
 
                                     {/* Product Info */}
                                     <div className="flex-1 min-w-0">
-                                        <h3 className="font-semibold text-[var(--color-neutral-50)] mb-2 truncate">
+                                        <h3 className="font-semibold text-foreground mb-2 truncate">
                                             {item.name}
                                         </h3>
-                                        <p className="text-2xl font-bold text-[var(--color-accent)] mb-4">
-                                            Ksh {item.price.toLocaleString()}
+                                        <p className="text-2xl font-bold text-accent mb-4">
+                                            KSh {item.price.toLocaleString()}
                                         </p>
 
                                         {/* Quantity Controls */}
                                         <div className="flex items-center gap-4">
-                                            <div className="flex items-center gap-3 bg-[var(--color-primary-light)] border border-white/10 rounded-lg p-1">
+                                            <div className="flex items-center gap-3 bg-surface border border-border rounded-lg p-1">
                                                 <button
                                                     onClick={() => handleUpdateQuantity(item.id, item.quantity - 1)}
                                                     disabled={item.quantity <= 1}
@@ -128,7 +128,7 @@ export default function CartPage() {
 
                                             <button
                                                 onClick={() => handleRemove(item.id)}
-                                                className="text-[var(--color-neutral-400)] hover:text-red-500 transition-colors flex items-center gap-2"
+                                                className="text-muted hover:text-danger transition-colors flex items-center gap-2"
                                             >
                                                 <Trash2 className="w-4 h-4" />
                                                 <span className="text-sm">Remove</span>
@@ -144,10 +144,10 @@ export default function CartPage() {
 
                                     {/* Subtotal */}
                                     <div className="text-right hidden sm:block">
-                                        <p className="text-sm text-[var(--color-neutral-500)] mb-1">
+                                        <p className="text-sm text-muted mb-1">
                                             Subtotal
                                         </p>
-                                        <p className="text-xl font-bold text-[var(--color-neutral-50)]">
+                                        <p className="text-xl font-bold text-foreground">
                                             Ksh {(item.price * item.quantity).toLocaleString()}
                                         </p>
                                     </div>
@@ -158,61 +158,61 @@ export default function CartPage() {
 
                     {/* Order Summary */}
                     <div className="lg:col-span-1">
-                        <div className="surface-elevated rounded-xl p-6 sticky top-24 space-y-6">
+                        <div className="surface-card rounded-xl p-6 sticky top-24 space-y-6">
                             <h2 className="text-xl font-bold">Order Summary</h2>
 
                             <div className="space-y-3">
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-[var(--color-neutral-400)]">
+                                    <span className="text-muted">
                                         Subtotal ({totalItems} items)
                                     </span>
-                                    <span className="font-medium text-[var(--color-neutral-100)]">
-                                        Ksh {totalPrice.toLocaleString()}
+                                    <span className="font-medium text-foreground">
+                                        KSh {totalPrice.toLocaleString()}
                                     </span>
                                 </div>
 
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-[var(--color-neutral-400)]">Shipping</span>
-                                    <span className="font-medium text-[var(--color-neutral-100)]">
+                                    <span className="text-muted">Shipping</span>
+                                    <span className="font-medium text-foreground">
                                         {shippingCost === 0 ? (
-                                            <span className="text-green-500">FREE</span>
+                                            <span className="text-success">FREE</span>
                                         ) : (
-                                            `Ksh ${shippingCost.toLocaleString()}`
+                                            `KSh ${shippingCost.toLocaleString()}`
                                         )}
                                     </span>
                                 </div>
 
                                 <div className="flex justify-between text-sm">
-                                    <span className="text-[var(--color-neutral-400)]">VAT (16%)</span>
-                                    <span className="font-medium text-[var(--color-neutral-100)]">
-                                        Ksh {taxAmount.toLocaleString()}
+                                    <span className="text-muted">VAT (16%)</span>
+                                    <span className="font-medium text-foreground">
+                                        KSh {taxAmount.toLocaleString()}
                                     </span>
                                 </div>
 
-                                <div className="divider-subtle" />
+                                <div className="border-t border-border pt-3" />
 
                                 <div className="flex justify-between">
-                                    <span className="font-semibold text-[var(--color-neutral-100)]">
+                                    <span className="font-semibold text-foreground">
                                         Total
                                     </span>
-                                    <span className="text-2xl font-bold text-[var(--color-accent)]">
-                                        Ksh {finalTotal.toLocaleString()}
+                                    <span className="text-2xl font-bold text-accent">
+                                        KSh {finalTotal.toLocaleString()}
                                     </span>
                                 </div>
                             </div>
 
                             {/* Free Shipping Progress */}
                             {totalPrice < 10000 && (
-                                <div className="bg-[var(--color-primary-light)] border border-white/10 rounded-lg p-4">
+                                <div className="bg-accent/5 border border-accent/20 rounded-lg p-4">
                                     <div className="flex items-start gap-3">
-                                        <Package className="w-5 h-5 text-[var(--color-accent)] flex-shrink-0 mt-0.5" />
+                                        <Package className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
                                         <div>
-                                            <p className="text-sm font-medium text-[var(--color-neutral-200)] mb-1">
+                                            <p className="text-sm font-medium text-foreground mb-1">
                                                 Almost there!
                                             </p>
-                                            <p className="text-xs text-[var(--color-neutral-400)]">
-                                                Add Ksh {(10000 - totalPrice).toLocaleString()} more to get{' '}
-                                                <span className="font-semibold text-green-500">free shipping</span>
+                                            <p className="text-xs text-muted">
+                                                Add KSh {(10000 - totalPrice).toLocaleString()} more to get{' '}
+                                                <span className="font-semibold text-success">free shipping</span>
                                             </p>
                                         </div>
                                     </div>
@@ -223,7 +223,7 @@ export default function CartPage() {
                             <div className="space-y-3">
                                 <Link
                                     href="/checkout"
-                                    className="btn-primary w-full text-center inline-block"
+                                    className="btn-accent w-full text-center inline-block"
                                 >
                                     Proceed to Checkout
                                 </Link>
@@ -236,7 +236,7 @@ export default function CartPage() {
                             </div>
 
                             {/* Trust Badges */}
-                            <div className="pt-4 space-y-2 text-xs text-[var(--color-neutral-500)]">
+                            <div className="pt-4 space-y-2 text-xs text-muted">
                                 <div className="flex items-center gap-2">
                                     <span className="text-green-500">✓</span>
                                     <span>Secure checkout</span>
