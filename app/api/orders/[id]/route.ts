@@ -24,7 +24,8 @@ export async function GET(
         }
 
         // Security check: Allow if admin OR if order belongs to user
-        if ((session.user as any).role !== 'admin' && order.user._id.toString() !== (session.user as any).id) {
+        const orderUserId = typeof order.user === 'string' ? order.user : order.user.toString();
+        if ((session.user as any).role !== 'admin' && orderUserId !== (session.user as any).id) {
             return NextResponse.json({ success: false, message: 'Unauthorized' }, { status: 403 });
         }
 
