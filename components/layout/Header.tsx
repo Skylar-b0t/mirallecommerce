@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useSession, signOut } from 'next-auth/react';
-import { Search, ShoppingCart, User, Menu, X, LogIn, LogOut, ChevronRight, Package, Truck, Info, Phone } from 'lucide-react';
+import { Search, ShoppingCart, User, Menu, X, LogOut, Sun, Moon, Laptop, Smartphone, Headphones, Watch, Camera, ArrowRight } from 'lucide-react';
 import { useAppSelector } from '@/lib/redux/hooks';
 import { ThemeToggle } from '../ui/ThemeToggle';
 
