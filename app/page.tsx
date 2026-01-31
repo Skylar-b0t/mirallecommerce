@@ -70,12 +70,10 @@ export default async function HomePage() {
 
   return (
     <div className="flex flex-col min-h-screen">
-      {/* Hero Section - Glassmorphic & Vibrant */}
+      {/* Hero Section */}
       <section className="relative overflow-hidden pt-10 pb-20 lg:pt-20 lg:pb-32">
-        {/* Background Gradients */}
+        {/* Simple Background */}
         <div className="absolute inset-0 bg-background z-0" />
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[100px] opacity-50 animate-pulse" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary/20 rounded-full blur-[100px] opacity-50" />
 
         <div className="container-custom relative z-10">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -102,7 +100,7 @@ export default async function HomePage() {
               </p>
 
               <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4">
-                <Link href="/products" className="btn-primary flex items-center gap-2 shadow-lg shadow-primary/25">
+                <Link href="/products" className="btn-accent flex items-center gap-2">
                   Shop Now
                   <ArrowRight className="w-5 h-5" />
                 </Link>
