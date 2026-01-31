@@ -14,7 +14,7 @@ export default function Header() {
     const pathname = usePathname();
     const router = useRouter();
     const { totalItems } = useAppSelector((state) => state.cart);
-    const { data: session } = useSession();
+    const { data: session, status } = useSession();
 
     useEffect(() => {
         const handleScroll = () => {
