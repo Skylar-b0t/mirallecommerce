@@ -1,9 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { ShoppingCart, Heart, Star, Truck, RotateCcw, Shield, Package } from 'lucide-react';
+import { ShoppingCart, Star, Truck, RotateCcw, Shield, CheckCircle } from 'lucide-react';
 import { useAppDispatch } from '@/lib/redux/hooks';
 import { addToCart } from '@/lib/redux/cartSlice';
+import PriceDisplay from '@/components/ui/PriceDisplay';
 
 interface Product {
     _id: string;
@@ -54,12 +55,12 @@ export default function BuyBox({ product }: BuyBoxProps) {
                     <Star
                         key={i}
                         className={`w-4 h-4 ${i < Math.floor(product.rating)
-                            ? 'fill-[var(--color-accent)] text-[var(--color-accent)]'
-                            : 'text-[var(--color-neutral-600)]'
+                                ? 'fill-amber-500 text-amber-500'
+                                : 'text-gray-300'
                             }`}
                     />
                 ))}
-                <span className="text-sm text-[var(--color-neutral-400)] ml-2">
+                <span className="text-sm text-muted ml-2">
                     {product.rating.toFixed(1)} ({product.numReviews} reviews)
                 </span>
             </div>
@@ -68,61 +69,56 @@ export default function BuyBox({ product }: BuyBoxProps) {
 
     return (
         <div className="lg:sticky lg:top-24 space-y-6">
-            <div className="surface-elevated rounded-2xl p-6 lg:p-8 space-y-6">
+            <div className="surface-card p-6 lg:p-8 space-y-6">
                 {/* Brand */}
                 <div>
-                    <span className="text-xs font-bold text-[var(--color-accent)] uppercase tracking-wider">
+                    <span className="text-xs font-bold text-primary uppercase tracking-wider">
                         {product.brand}
                     </span>
                 </div>
 
                 {/* Product Name */}
-                <h1 className="text-3xl lg:text-4xl font-bold text-[var(--color-neutral-50)] leading-tight">
+                <h1 className="text-3xl lg:text-4xl font-bold text-foreground leading-tight">
                     {product.name}
                 </h1>
 
                 {/* Rating */}
                 <div>{renderStars()}</div>
 
-                <div className="divider-subtle" />
+                <div className="border-t border-border pt-6" />
 
                 {/* Price */}
-                <div className="flex items-baseline gap-3">
-                    <span className="text-4xl font-bold text-[var(--color-neutral-50)]">
-                        Ksh {product.price.toLocaleString()}
-                    </span>
-                    <span className="text-sm text-[var(--color-neutral-500)]">KES</span>
-                </div>
+                <PriceDisplay price={product.price} className="!text-4xl" />
 
                 {/* Stock Status */}
                 <div>
                     {product.stock > 0 ? (
                         <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-green-500" />
-                            <span className="text-sm font-medium text-green-500">
+                            <div className="w-2 h-2 rounded-full bg-success" />
+                            <span className="text-sm font-medium text-success">
                                 {product.stock > 10 ? 'In Stock' : `Only ${product.stock} left`}
                             </span>
                         </div>
                     ) : (
                         <div className="flex items-center gap-2">
-                            <div className="w-2 h-2 rounded-full bg-red-500" />
-                            <span className="text-sm font-medium text-red-500">Out of Stock</span>
+                            <div className="w-2 h-2 rounded-full bg-danger" />
+                            <span className="text-sm font-medium text-danger">Out of Stock</span>
                         </div>
                     )}
                 </div>
 
-                <div className="divider-subtle" />
+                <div className="border-t border-border pt-6" />
 
                 {/* Quantity Selector */}
                 <div>
-                    <label className="block text-sm font-medium text-[var(--color-neutral-300)] mb-3">
+                    <label className="block text-sm font-medium text-foreground mb-3">
                         Quantity
                     </label>
-                    <div className="flex items-center gap-3 bg-[var(--color-primary-light)] border border-white/10 rounded-lg p-2 w-fit">
+                    <div className="flex items-center gap-3 bg-surface border border-border rounded-lg p-2 w-fit">
                         <button
                             onClick={() => handleQuantityChange(-1)}
                             disabled={quantity <= 1}
-                            className="w-10 h-10 flex items-center justify-center rounded hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[44px]"
                             aria-label="Decrease quantity"
                         >
                             <span className="text-xl font-bold">−</span>
@@ -131,7 +127,7 @@ export default function BuyBox({ product }: BuyBoxProps) {
                         <button
                             onClick={() => handleQuantityChange(1)}
                             disabled={quantity >= product.stock}
-                            className="w-10 h-10 flex items-center justify-center rounded hover:bg-white/5 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            className="w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors min-h-[44px]"
                             aria-label="Increase quantity"
                         >
                             <span className="text-xl font-bold">+</span>
@@ -144,7 +140,7 @@ export default function BuyBox({ product }: BuyBoxProps) {
                     <button
                         onClick={handleAddToCart}
                         disabled={product.stock === 0}
-                        className="btn-primary w-full text-base py-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="btn-accent w-full text-base py-4 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                         <ShoppingCart className="w-5 h-5" />
                         {addedToCart ? 'Added to Cart!' : 'Add to Cart'}
@@ -152,74 +148,74 @@ export default function BuyBox({ product }: BuyBoxProps) {
 
                     <button
                         disabled={product.stock === 0}
-                        className="btn-secondary w-full text-base py-4 disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="btn-primary w-full text-base py-4 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Buy Now
                     </button>
-
-                    <button className="w-full py-3 flex items-center justify-center gap-2 text-[var(--color-neutral-400)] hover:text-[var(--color-accent)] transition-colors">
-                        <Heart className="w-5 h-5" />
-                        <span className="text-sm font-medium">Add to Wishlist</span>
-                    </button>
                 </div>
 
-                <div className="divider-subtle" />
+                <div className="border-t border-border pt-6" />
 
-                {/* Trust Badges */}
-                <div className="space-y-3">
-                    <div className="flex items-center gap-3 text-sm">
-                        <Truck className="w-5 h-5 text-[var(--color-accent)] flex-shrink-0" />
-                        <div>
-                            <div className="font-medium text-[var(--color-neutral-200)]">Free Shipping</div>
-                            <div className="text-xs text-[var(--color-neutral-500)]">On orders over Ksh 10,000</div>
+                {/* Trust Signals - Kenyan Market */}
+                <div className="space-y-4">
+                    <h3 className="text-sm font-semibold text-foreground mb-3">
+                        Why Buy from Mirall?
+                    </h3>
+
+                    <div className="space-y-3">
+                        <div className="flex items-start gap-3 text-sm">
+                            <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+                            <div>
+                                <div className="font-medium text-foreground">Genuine Products</div>
+                                <div className="text-xs text-muted">Authorized reseller</div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="flex items-center gap-3 text-sm">
-                        <RotateCcw className="w-5 h-5 text-[var(--color-accent)] flex-shrink-0" />
-                        <div>
-                            <div className="font-medium text-[var(--color-neutral-200)]">30-Day Returns</div>
-                            <div className="text-xs text-[var(--color-neutral-500)]">Easy return process</div>
+                        <div className="flex items-start gap-3 text-sm">
+                            <Shield className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+                            <div>
+                                <div className="font-medium text-foreground">1 Year Warranty</div>
+                                <div className="text-xs text-muted">Manufacturer warranty</div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="flex items-center gap-3 text-sm">
-                        <Shield className="w-5 h-5 text-[var(--color-accent)] flex-shrink-0" />
-                        <div>
-                            <div className="font-medium text-[var(--color-neutral-200)]">1-Year Warranty</div>
-                            <div className="text-xs text-[var(--color-neutral-500)]">Manufacturer warranty</div>
+                        <div className="flex items-start gap-3 text-sm">
+                            <Truck className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+                            <div>
+                                <div className="font-medium text-foreground">Fast Delivery in Kenya</div>
+                                <div className="text-xs text-muted">Free shipping over KSh 10,000</div>
+                            </div>
                         </div>
-                    </div>
 
-                    <div className="flex items-center gap-3 text-sm">
-                        <Package className="w-5 h-5 text-[var(--color-accent)] flex-shrink-0" />
-                        <div>
-                            <div className="font-medium text-[var(--color-neutral-200)]">Secure Packaging</div>
-                            <div className="text-xs text-[var(--color-neutral-500)]">Protected delivery</div>
+                        <div className="flex items-start gap-3 text-sm">
+                            <RotateCcw className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
+                            <div>
+                                <div className="font-medium text-foreground">30-Day Returns</div>
+                                <div className="text-xs text-muted">Easy return process</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Additional Info Card */}
-            <div className="surface-elevated rounded-xl p-6 bg-[var(--color-primary-light)] border border-white/10">
-                <h3 className="text-sm font-semibold text-[var(--color-neutral-200)] mb-3">
-                    Why Buy from Mirall?
-                </h3>
-                <ul className="space-y-2 text-sm text-[var(--color-neutral-400)]">
-                    <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-0.5">✓</span>
-                        <span>Authorized reseller with official warranty</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-0.5">✓</span>
-                        <span>Expert customer support team</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                        <span className="text-green-500 mt-0.5">✓</span>
-                        <span>Fast and secure shipping</span>
-                    </li>
-                </ul>
+            {/* Sticky Mobile CTA */}
+            <div className="fixed bottom-0 left-0 right-0 lg:hidden bg-background border-t border-border p-4 z-40">
+                <div className="flex gap-3">
+                    <button
+                        onClick={handleAddToCart}
+                        disabled={product.stock === 0}
+                        className="btn-accent flex-1 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        <ShoppingCart className="w-5 h-5 inline mr-2" />
+                        {addedToCart ? 'Added!' : 'Add to Cart'}
+                    </button>
+                    <button
+                        disabled={product.stock === 0}
+                        className="btn-primary flex-1 py-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                        Buy Now
+                    </button>
+                </div>
             </div>
         </div>
     );
