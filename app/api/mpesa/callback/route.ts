@@ -32,8 +32,7 @@ export async function POST(req: NextRequest) {
                 order.paymentResult = {
                     id: checkoutRequestID,
                     status: 'COMPLETED',
-                    update_time: new Date().toISOString(),
-                    email_address: mpesaReceiptNumber, // Storing receipt here for now
+                    email: mpesaReceiptNumber, // Storing receipt number in email field
                 };
                 await order.save();
                 console.log(`Order ${order._id} marked as paid.`);
