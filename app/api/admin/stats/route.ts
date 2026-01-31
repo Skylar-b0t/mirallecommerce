@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
         const session = await getServerSession(authOptions);
 
         // Simple security check (middleware covers mostly, but double check)
-        if (!session || session.user.role !== 'admin') {
+        if (!session || !session.user || (session.user as any).role !== 'admin') {
             return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
         }
 
